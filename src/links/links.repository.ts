@@ -20,6 +20,14 @@ function toRecord(row: LinkRow): LinkRecord {
   return { slug: row.slug, url: row.url, hits: row.hits, createdAt: row.created_at };
 }
 
+function isUniqueSlugViolation(error: unknown): boolean {
+  return (
+    error instanceof Error &&
+    (error as NodeJS.ErrnoException).code === 'ERR_SQLITE_ERROR' &&
+    /UNIQUE constraint failed/.test(error.message)
+  );
+}
+
 @Injectable()
 export class LinksRepository {
   constructor(@Inject(DATABASE_CONNECTION) private readonly db: DatabaseSync) {}
@@ -29,6 +37,18 @@ export class LinksRepository {
       .prepare('INSERT INTO links (slug, url, hits, created_at) VALUES (?, ?, 0, ?)')
       .run(slug, url, createdAt);
     return { slug, url, hits: 0, createdAt };
+  }
+
+  /** Returns null on a slug collision instead of throwing, so callers can retry. */
+  tryCreate(slug: string, url: string, createdAt: string): LinkRecord | null {
+    try {
+      return this.create(slug, url, createdAt);
+    } catch (error) {
+      if (isUniqueSlugViolation(error)) {
+        return null;
+      }
+      throw error;
+    }
   }
 
   findBySlug(slug: string): LinkRecord | undefined {

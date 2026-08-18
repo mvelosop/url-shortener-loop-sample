@@ -1,28 +1,33 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { randomBytes } from 'node:crypto';
+import {
+  Inject,
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { LinkRecord, LinksRepository } from './links.repository';
+import { SLUG_GENERATOR, SlugGenerator } from './slug.generator';
 
-const SLUG_ALPHABET =
-  'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-const SLUG_LENGTH = 6;
-
-function generateSlug(): string {
-  const bytes = randomBytes(SLUG_LENGTH);
-  let slug = '';
-  for (let i = 0; i < SLUG_LENGTH; i++) {
-    slug += SLUG_ALPHABET[bytes[i] % SLUG_ALPHABET.length];
-  }
-  return slug;
-}
+export const MAX_SLUG_ATTEMPTS = 5;
 
 @Injectable()
 export class LinksService {
-  constructor(private readonly repository: LinksRepository) {}
+  constructor(
+    private readonly repository: LinksRepository,
+    @Inject(SLUG_GENERATOR) private readonly slugGenerator: SlugGenerator,
+  ) {}
 
   create(url: string): LinkRecord {
-    const slug = generateSlug();
     const createdAt = new Date().toISOString();
-    return this.repository.create(slug, url, createdAt);
+    for (let attempt = 0; attempt < MAX_SLUG_ATTEMPTS; attempt++) {
+      const slug = this.slugGenerator.generate();
+      const record = this.repository.tryCreate(slug, url, createdAt);
+      if (record) {
+        return record;
+      }
+    }
+    throw new InternalServerErrorException(
+      `Could not generate a unique slug after ${MAX_SLUG_ATTEMPTS} attempts`,
+    );
   }
 
   findBySlug(slug: string): LinkRecord {

@@ -2,17 +2,19 @@
 > url-shortener@0.0.1 build
 > nest build
 
-(node:4970) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:14924) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
-(node:4971) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:14925) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
+(node:14945) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS src/links/links.service.spec.ts
 PASS src/health/health.controller.spec.ts
-  HealthController
-    ✓ reports ok status (4 ms)
+PASS src/links/slug.generator.spec.ts
 
-Test Suites: 1 passed, 1 total
-Tests:       1 passed, 1 total
+Test Suites: 3 passed, 3 total
+Tests:       10 passed, 10 total
 Snapshots:   0 total
-Time:        0.684 s, estimated 1 s
+Time:        0.707 s, estimated 1 s
 Ran all test suites.
-Test results written to: ../../../../../../var/folders/g2/djnxzpd977q8pftlg1kl2zlr0000gn/T/tmp.ncLFOTvVwB/unit.json
+Test results written to: ../../../../../../var/folders/g2/djnxzpd977q8pftlg1kl2zlr0000gn/T/tmp.VcLkAiVAaR/unit.json

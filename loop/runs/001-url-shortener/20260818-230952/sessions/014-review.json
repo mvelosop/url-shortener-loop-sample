@@ -1,0 +1,70 @@
+{
+  "is_error": false,
+  "duration_api_ms": 117299,
+  "num_turns": 27,
+  "stop_reason": "end_turn",
+  "session_id": "90923465-2739-4ed6-a4b9-413a9a993c9d",
+  "total_cost_usd": 0.6126564,
+  "usage": {
+    "input_tokens": 30,
+    "cache_creation_input_tokens": 40055,
+    "cache_read_input_tokens": 752438,
+    "output_tokens": 9767,
+    "output_tokens_details": {
+      "thinking_tokens": 5374
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 40055,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 305,
+        "cache_read_input_tokens": 62558,
+        "cache_creation_input_tokens": 1815,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1815
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 30,
+      "outputTokens": 9767,
+      "cacheReadInputTokens": 752438,
+      "cacheCreationInputTokens": 40055,
+      "webSearchRequests": 0,
+      "costUSD": 0.6126564,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**PASS** — all 7 acceptance criteria are met: slug generation is behind an injectable, seedable provider (`slug.generator.ts`), the service retries up to 5 candidates on collision, exhaustion throws a real 500 with no row written, and `links.service.spec.ts` exercises both the retry-then-succeed and exhaust-then-500 paths with a genuine fake (not fixture-hardcoded). The driver's independent gate run confirms this end-to-end over real HTTP/sqlite with a forced deterministic collision.\n\nOne thing worth a maintainer's attention (not a fail): the work session's proposal claims it ran T7's exact gate verify command and got exit 0, but the session log shows that literal command was denied by a permission hook — the driver's own separate gate run is what actually confirms the pass, so the self-report is a bit misleading even though the result is correct. Noted in `loop/verdict.json`.",
+  "ttft_ms": 2552,
+  "ttft_stream_ms": 1467,
+  "time_to_request_ms": 468,
+  "type": "result",
+  "duration_ms": 125255,
+  "uuid": "fd07e033-ef11-4a68-b1d9-d8ce69ec5506",
+  "phase": "review",
+  "iteration": 7
+}

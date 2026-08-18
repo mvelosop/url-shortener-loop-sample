@@ -1,0 +1,43 @@
+{
+  "task": "T7",
+  "verdict": "PASS",
+  "criteria": [
+    {
+      "criterion": "Slug generation sits behind an injectable provider that a test can replace, rather than being called inline as a free function in the service.",
+      "met": true,
+      "evidence": "src/links/slug.generator.ts defines SLUG_GENERATOR token and SlugGenerator interface; links.service.ts injects it via @Inject(SLUG_GENERATOR); links.module.ts provides it via a factory; links.service.spec.ts substitutes a QueueSlugGenerator fake."
+    },
+    {
+      "criterion": "With SLUG_SEED set, slug generation is deterministic: two fresh processes with the same seed produce the same sequence of slugs. With SLUG_SEED unset, slugs are random.",
+      "met": true,
+      "evidence": "slug.generator.ts: RandomSlugGenerator seeds a pure mulberry32 PRNG from hashSeed(seed) when a seed is given (deterministic, no external state), else uses node:crypto randomBytes. T7's gate script independently confirms cross-process determinism (two fresh boots with the same SLUG_SEED reproduce the same first slug) and it passed silently (no GATE FAIL in gates/T7.log)."
+    },
+    {
+      "criterion": "Seeded slugs are still exactly 6 characters from [A-Za-z0-9].",
+      "met": true,
+      "evidence": "slug.generator.ts generate() always builds a SLUG_LENGTH=6 string indexing into the 62-char SLUG_ALPHABET regardless of seeded/unseeded path; slug.generator.spec.ts asserts /^[A-Za-z0-9]{6}$/ on both paths."
+    },
+    {
+      "criterion": "On a collision the service generates a fresh slug and retries, trying at most 5 candidates in total for one create.",
+      "met": true,
+      "evidence": "links.service.ts create() loops for (attempt = 0; attempt < MAX_SLUG_ATTEMPTS=5; attempt++), calling repository.tryCreate each time."
+    },
+    {
+      "criterion": "A create that collides fewer than 5 times still returns 201, with a slug that is not already in use.",
+      "met": true,
+      "evidence": "links.service.spec.ts 'retries past collisions and succeeds' test: 2 pre-taken slugs force 2 nulls, 3rd candidate succeeds, tryCreate called 3 times, returned slug is the unused one. Gate script's retry-then-201 check over real HTTP/sqlite also passed silently."
+    },
+    {
+      "criterion": "A create whose 5 candidates all collide returns 500, writes no row, and never returns an already-used slug.",
+      "met": true,
+      "evidence": "links.service.ts throws InternalServerErrorException after the loop exhausts MAX_SLUG_ATTEMPTS without a successful tryCreate. links.service.spec.ts 'throws a 500 after exhausting' test confirms 5 calls and the thrown exception type. Gate script's exhaustion check queries the real sqlite table afterward and requires exactly 5 rows with 0 duplicate slugs, and passed silently (gates/T7.log has no GATE FAIL)."
+    },
+    {
+      "criterion": "Unit tests substitute the slug provider to force a collision and cover both the retry-then-succeed and the exhaust-then-500 paths.",
+      "met": true,
+      "evidence": "links.service.spec.ts defines QueueSlugGenerator and exercises both scenarios against a fake repository that simulates collisions via a 'taken' set — not hardcoded to any fixture value."
+    }
+  ],
+  "findings": [],
+  "notes": "The work session's own attempt to shell out the literal T7 gate verify command (byte-for-byte, from loop/state.json) was denied by a permission hook, and proposal.json's 'Verified via T7's own gate ... exit 0' claim glosses over that denial. This doesn't affect the verdict: the driver's own independent gate run (gates/T7.log) completed with only the expected build/experimental-warning lines and no 'GATE FAIL' text, which is exactly what a silent, all-checks-passed run of that script looks like (it only prints on failure). Worth a maintainer glance at the permission-fence placement so future work sessions can't produce a misleading self-report even when the underlying result happens to be correct."
+}

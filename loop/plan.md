@@ -4,9 +4,9 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **6/10 done** · iteration 6
+**Status:** running · **7/10 done** · iteration 7
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:29:40Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:35:20Z
 
 ## Progress
 
@@ -16,7 +16,7 @@
 - [x] **T4** — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
 - [x] **T5** — Return 404 for an unknown slug on both lookup routes
 - [x] **T6** — Reject an invalid url with 400 naming the offending field
-- [ ] **T7** — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
+- [x] **T7** — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
 - [ ] **T8** — Serve a browsable Swagger UI at /api and the OpenAPI document at /api-json
 - [ ] **T9** — Write the end-to-end acceptance test for the brief's worked example
 - [ ] **T10** — Prove the built artifact boots, shuts down cleanly, and keeps its links across a restart
@@ -164,7 +164,7 @@ d=$(mktemp -d) && npm run build && GATE_DIR="$d" node -e 'const cp=require("node
 
 ### T7 — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
 
-`pending` · depends on: T3
+`done` · depends on: T3
 
 Slugs are generated, so two creates can collide, and a collision must never reach the client as a duplicate or a raw database error. The brief requires this path to be exercisable rather than asserted, so slug generation goes behind an injectable provider and, when the `SLUG_SEED` environment variable is set, produces a deterministic sequence — a fresh process with the same seed generates the same slugs in the same order. That is what lets a test (and this task's gate) force a real collision instead of hoping for one. The retry budget is five candidates per create; the fifth failure is a 500.
 

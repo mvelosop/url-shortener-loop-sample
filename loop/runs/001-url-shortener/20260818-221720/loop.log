@@ -14,3 +14,24 @@
 [36m[loop][0m cost=$3.9526755000000007 turns=41 dur=874s error=false
 [33m[loop][0m     2 permission denial(s) — the fence may be in the wrong place
 [36m[loop][0m planned: 0001-url-shortener — 10 tasks
+[36m[loop][0m committed the plan
+[36m[loop][0m 
+[36m[loop][0m ═══ max_iterations ═══
+[36m[loop][0m run:    001-url-shortener/20260818-221720  (0 iteration(s) this run)
+[36m[loop][0m plan:   0/10 done, 0 blocked
+[36m[loop][0m   ── signals ──
+[36m[loop][0m   iterations:            0
+[36m[loop][0m   tasks closed:          0/0
+[36m[loop][0m   iterations per closed: n/a
+[36m[loop][0m   gate failures:         0
+[36m[loop][0m   review rejections:     0
+[36m[loop][0m   attempts burned:       0
+[36m[loop][0m   no-progress streak:    0
+[36m[loop][0m   estimated spend:       $3.95 (estimate, not a bill)
+[36m[loop][0m 
+[36m[loop][0m per-phase cost:
+[36m[loop][0m plan: 1 session(s), $3.95, 41 turns
+[36m[loop][0m work: 0 session(s), $0, 0 turns
+[36m[loop][0m review: 0 session(s), $0, 0 turns
+[36m[loop][0m 
+[36m[loop][0m iteration budget spent. resumable: re-run loop/run.sh

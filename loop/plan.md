@@ -4,9 +4,9 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **0/10 done** · iteration 0
+**Status:** max_iterations · **0/10 done** · iteration 0
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T21:30:54Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T21:31:55Z
 
 ## Progress
 

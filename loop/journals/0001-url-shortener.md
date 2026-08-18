@@ -37,3 +37,9 @@ The gates are Node probes that build, boot `dist/main.js` on ports 3101–3110 a
 
 One gate is weaker than the rest and you should know it: **T9 can only read jest's report about the e2e suite** — no gate can confirm from outside that the suite really threads the returned slug. I required at least 4 passing tests and two consecutive clean runs (which breaks a hardcoded slug or leaked state), but the worked-example fidelity is the review session's call, so T9's acceptance criteria spell out each step.
 
+
+## Run ended — max_iterations
+
+- **Run:** `20260818-221720` · 0 iteration(s) this run
+- **Plan:** 0/10 done, 0 blocked
+- **Signals:** 0 iterations · n/a per closed · 0 gate failure(s) · 0 review rejection(s) · 0 attempt(s) burned · streak 0 · ~$3.95

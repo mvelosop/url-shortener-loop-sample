@@ -1,10 +1,10 @@
 {
   "run_id": "0001-url-shortener",
   "brief": "docs/briefs/0001-url-shortener.md",
-  "status": "running",
+  "status": "max_iterations",
   "iteration": 0,
   "created": "2026-08-18T21:30:54Z",
-  "updated": "2026-08-18T21:30:54Z",
+  "updated": "2026-08-18T21:31:55Z",
   "tasks": [
     {
       "id": "T1",

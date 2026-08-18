@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { CreateLinkDto } from './dto/create-link.dto';
 import { LinkRecord } from './links.repository';
 import { LinksService } from './links.service';
@@ -10,5 +10,10 @@ export class LinksController {
   @Post()
   create(@Body() dto: CreateLinkDto): LinkRecord {
     return this.linksService.create(dto.url);
+  }
+
+  @Get(':slug')
+  findOne(@Param('slug') slug: string): LinkRecord {
+    return this.linksService.findBySlug(slug);
   }
 }

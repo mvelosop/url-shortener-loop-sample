@@ -2,9 +2,9 @@
   "run_id": "0001-url-shortener",
   "brief": "docs/briefs/0001-url-shortener.md",
   "status": "running",
-  "iteration": 3,
+  "iteration": 4,
   "created": "2026-08-18T21:30:54Z",
-  "updated": "2026-08-18T22:20:35Z",
+  "updated": "2026-08-18T22:24:13Z",
   "tasks": [
     {
       "id": "T1",
@@ -114,7 +114,7 @@
         "`GET /health` still returns 200: the root `:slug` route does not shadow the fixed routes."
       ],
       "verify": "d=$(mktemp -d) && npm run build && GATE_DIR=\"$d\" node -e 'const cp=require(\"node:child_process\"); const H=\"http://127.0.0.1:\"; const G=process.env.GATE_DIR; const URL1=\"https://example.com/a/very/long/path\"; const KIDS=[]; const kill=()=>{for(const k of KIDS){try{k.kill(\"SIGKILL\");}catch(e){}}}; const fail=(m)=>{console.error(\"GATE FAIL: \"+m);kill();process.exit(1);}; const done=()=>{kill();process.exit(0);}; const migrate=(db)=>{cp.execFileSync(\"npm\",[\"run\",\"--silent\",\"migrate\"],{env:Object.assign({},process.env,{DATABASE_PATH:db}),stdio:[\"ignore\",\"ignore\",\"inherit\"]});}; const boot=(port,env)=>{const p=cp.spawn(process.execPath,[\"dist/main.js\"],{env:Object.assign({},process.env,{PORT:String(port)},env),stdio:[\"ignore\",\"ignore\",\"inherit\"]});KIDS.push(p);return p;}; const stop=(p)=>new Promise(res=>{if(p.exitCode!==null||p.signalCode!==null){return res({code:p.exitCode,signal:p.signalCode});}const t=setTimeout(()=>{p.kill(\"SIGKILL\");},8000);t.unref();p.once(\"exit\",(code,signal)=>{clearTimeout(t);res({code:code,signal:signal});});p.kill(\"SIGTERM\");}); const up=async(port)=>{for(let i=0;i<200;i++){try{const r=await fetch(H+port+\"/health\");if(r.status===200){return true;}}catch(e){}await new Promise(r=>setTimeout(r,100));}return false;}; const post=(port,body)=>fetch(H+port+\"/links\",{method:\"POST\",headers:{\"content-type\":\"application/json\"},body:JSON.stringify(body)}); (async()=>{ const db=G+\"/t4.db\"; migrate(db); const p=boot(3104,{DATABASE_PATH:db}); if(!(await up(3104))){return fail(\"the server did not come up on port 3104\");} const c=await post(3104,{url:URL1}); if(c.status!==201){return fail(\"POST /links returned \"+c.status);} const slug=(await c.json()).slug; for(const n of [1,2]){ const g=await fetch(H+3104+\"/\"+slug,{redirect:\"manual\"}); if(g.status!==302){return fail(\"GET /\"+slug+\" returned \"+g.status+\" on request \"+n+\", expected 302\");} if(g.headers.get(\"location\")!==URL1){return fail(\"the Location header was \"+JSON.stringify(g.headers.get(\"location\")));} } const l=await fetch(H+3104+\"/links/\"+slug); if(l.status!==200){return fail(\"GET /links/\"+slug+\" returned \"+l.status);} const lb=await l.json(); if(lb.slug!==slug||lb.url!==URL1){return fail(\"GET /links/:slug returned \"+JSON.stringify(lb));} if(lb.hits!==2){return fail(\"after two redirects hits was \"+JSON.stringify(lb.hits)+\", expected 2\");} const l2=await fetch(H+3104+\"/links/\"+slug); const lb2=await l2.json(); if(lb2.hits!==2){return fail(\"reading GET /links/:slug changed the hit count to \"+lb2.hits+\"; only GET /:slug counts\");} const hh=await fetch(H+3104+\"/health\"); if(hh.status!==200){return fail(\"GET /health returned \"+hh.status+\"; the :slug route must not shadow it\");} await stop(p); done(); })().catch(e=>fail(String((e&&e.stack)||e)));'; rc=$?; rm -rf \"$d\"; exit $rc",
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "notes": ""
     },

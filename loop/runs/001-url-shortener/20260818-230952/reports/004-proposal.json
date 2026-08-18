@@ -1,0 +1,14 @@
+{
+  "task": "T4",
+  "outcome": "done",
+  "summary": "Added GET /:slug (redirect, increments hits) via a new RedirectController, and GET /links/:slug (pure read) on the existing LinksController; the repository gained findBySlug and incrementHits.",
+  "files": [
+    "src/links/links.controller.ts",
+    "src/links/redirect.controller.ts",
+    "src/links/links.service.ts",
+    "src/links/links.repository.ts",
+    "src/links/links.module.ts"
+  ],
+  "verified": "T4's own gate (npm run build; boot dist/main.js; POST /links then two GET /:slug -> 302 with correct Location; GET /links/:slug -> 200 with hits 2 after two redirects and an extra read that doesn't change it; GET /health still 200) passed with exit 0. Also re-ran T1, T2 and T3's verify commands (all exit 0) and `npm test` (1/1 passing) to confirm no regression.",
+  "notes": "RedirectController (@Controller() with @Get(':slug') + @Redirect()) is registered in LinksModule's controllers array after LinksController: [LinksController, RedirectController]. Empirically this puts the catch-all :slug route after /health (declared directly on AppModule, which is imported after LinksModule in the module graph) and after /links/:slug (registered earlier in the same array) in Nest's route table, so GET /health and GET /links/:slug are matched first and never reach the redirect handler; verified by booting the built artifact and hitting /health, /links/:slug and /:slug directly, plus the gate's own health-after-redirect check. LinksService.redirect()/findBySlug() both throw NestJS's built-in NotFoundException when the repository returns undefined — this is necessary just to avoid the redirect/read handlers crashing on an unknown slug (an UPDATE on a non-existent slug is a harmless no-op, then the follow-up SELECT returns undefined), not an attempt to fully implement T5's 404 acceptance criteria (JSON message body, no-DB-row-created checks, etc. are exercised by T5's own gate, which I did not run)."
+}

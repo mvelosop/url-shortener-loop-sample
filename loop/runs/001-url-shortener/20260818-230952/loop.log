@@ -51,3 +51,20 @@
 [36m[loop][0m cost=$0.5919110999999999 turns=21 dur=74s error=false
 [36m[loop][0m    review: PASS
 [36m[loop][0m    T3 done
+[36m[loop][0m    committed b1a7775
+[36m[loop][0m   ── signals ──
+[36m[loop][0m   iterations:            3
+[36m[loop][0m   tasks closed:          3/10
+[36m[loop][0m   iterations per closed: 1.00
+[36m[loop][0m   gate failures:         0
+[36m[loop][0m   review rejections:     0
+[36m[loop][0m   attempts burned:       0
+[36m[loop][0m   no-progress streak:    0
+[36m[loop][0m   estimated spend:       $4.61 (estimate, not a bill)
+[36m[loop][0m ── iteration 4 (4/30 this run) · T4 · 3/10 done ──
+[36m[loop][0m    Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
+[36m[loop][0m cost=$1.0468886999999998 turns=33 dur=154s error=false
+[33m[loop][0m     2 permission denial(s) — the fence may be in the wrong place
+[36m[loop][0m cost=$0.5043534 turns=16 dur=51s error=false
+[36m[loop][0m    review: PASS
+[36m[loop][0m    T4 done

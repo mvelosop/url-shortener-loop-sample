@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { randomBytes } from 'node:crypto';
 import { LinkRecord, LinksRepository } from './links.repository';
 
@@ -23,5 +23,21 @@ export class LinksService {
     const slug = generateSlug();
     const createdAt = new Date().toISOString();
     return this.repository.create(slug, url, createdAt);
+  }
+
+  findBySlug(slug: string): LinkRecord {
+    const link = this.repository.findBySlug(slug);
+    if (!link) {
+      throw new NotFoundException(`No link found for slug "${slug}"`);
+    }
+    return link;
+  }
+
+  redirect(slug: string): LinkRecord {
+    const link = this.repository.incrementHits(slug);
+    if (!link) {
+      throw new NotFoundException(`No link found for slug "${slug}"`);
+    }
+    return link;
   }
 }

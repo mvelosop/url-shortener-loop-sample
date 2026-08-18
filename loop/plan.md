@@ -4,16 +4,16 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **3/10 done** · iteration 3
+**Status:** running · **4/10 done** · iteration 4
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:20:35Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:24:13Z
 
 ## Progress
 
 - [x] **T1** — Scaffold the NestJS project with a working build, two test commands and GET /health
 - [x] **T2** — Create the links schema with an explicit npm run migrate step
 - [x] **T3** — Create a link with POST /links
-- [ ] **T4** — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
+- [x] **T4** — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
 - [ ] **T5** — Return 404 for an unknown slug on both lookup routes
 - [ ] **T6** — Reject an invalid url with 400 naming the offending field
 - [ ] **T7** — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
@@ -96,7 +96,7 @@ d=$(mktemp -d) && npm run build && GATE_DIR="$d" node -e 'const cp=require("node
 
 ### T4 — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
 
-`pending` · depends on: T3
+`done` · depends on: T3
 
 This is what the shortener is for: following a slug redirects to the target and is the only thing that counts. Reading a link back through `GET /links/:slug` must be a pure read, which is the distinction the worked example checks (two redirects then a read reports hits == 2). The redirect route lives at the application root, so this task is also where route ordering matters — `/health`, `/links`, `/api` and `/api-json` must keep working alongside it.
 

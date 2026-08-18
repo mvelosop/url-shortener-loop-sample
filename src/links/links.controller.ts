@@ -12,16 +12,7 @@ export class LinksController {
 
   @Post()
   @ApiOperation({ summary: 'Shorten a url.' })
-  @ApiBody({
-    description: 'The long url to shorten.',
-    schema: {
-      type: 'object',
-      required: ['url'],
-      properties: {
-        url: { type: 'string', example: 'https://example.com/a/long/path' },
-      },
-    },
-  })
+  @ApiBody({ type: CreateLinkDto })
   @ApiResponse({ status: 201, description: 'The created link.', type: LinkDto })
   @ApiResponse({ status: 400, description: 'The url is missing, empty, non-string or non-HTTP(S).' })
   create(@Body() dto: CreateLinkDto): LinkRecord {

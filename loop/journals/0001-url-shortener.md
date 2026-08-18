@@ -120,3 +120,9 @@ One gate is weaker than the rest and you should know it: **T9 can only read jest
 - **Summary:** Added README.md documenting build, migrate, start, test and test:e2e with repo-relative paths; no source changes were needed since T2/T7/T8's prior work (explicit migrate step, enableShutdownHooks, PORT/DATABASE_PATH config) already satisfied the built-artifact boot/restart/shutdown behaviour T10 checks.
 - **Files:** README.md
 - **Notes for next iteration:** src/main.ts already called app.enableShutdownHooks() and read PORT/DATABASE_PATH from env (from earlier tasks), and src/database/migrate.ts's explicit `npm run migrate` step was already the only path that creates the links table — none of that needed changes for T10. The only gap was the missing README.md, which this task adds, covering install/build/migrate/start/test/test:e2e all with repo-relative paths (data/links.db, dist/main.js, test/*.e2e-spec.ts), no absolute paths.
+
+## Run ended — complete
+
+- **Run:** `20260818-230952` · 11 iteration(s) this run
+- **Plan:** 10/10 done, 0 blocked
+- **Signals:** 11 iterations · 1.10 per closed · 0 gate failure(s) · 1 review rejection(s) · 1 attempt(s) burned · streak 0 · ~$15.91

@@ -4,9 +4,9 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **8/10 done** · iteration 9
+**Status:** running · **9/10 done** · iteration 10
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:46:47Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:49:46Z
 
 ## Progress
 
@@ -18,7 +18,7 @@
 - [x] **T6** — Reject an invalid url with 400 naming the offending field
 - [x] **T7** — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
 - [x] **T8** — Serve a browsable Swagger UI at /api and the OpenAPI document at /api-json · 1 attempt(s)
-- [ ] **T9** — Write the end-to-end acceptance test for the brief's worked example
+- [x] **T9** — Write the end-to-end acceptance test for the brief's worked example
 - [ ] **T10** — Prove the built artifact boots, shuts down cleanly, and keeps its links across a restart
 
 ## Tasks
@@ -211,7 +211,7 @@ d=$(mktemp -d) && npm run build && GATE_DIR="$d" node -e 'const cp=require("node
 
 ### T9 — Write the end-to-end acceptance test for the brief's worked example
 
-`pending` · depends on: T5, T6, T7
+`done` · depends on: T5, T6, T7
 
 Everything up to here is checked endpoint by endpoint; this is the one test that walks the whole worked example in order, over HTTP, as a client would. It has to thread the slug it received through every later request — an implementation that only works for a hardcoded slug must fail it. It runs under `npm run test:e2e`, which stays a separate command from the unit suite, and it must be self-contained: its own throwaway SQLite file, no network, seconds to run.
 

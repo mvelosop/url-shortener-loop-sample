@@ -2,9 +2,9 @@
   "run_id": "0001-url-shortener",
   "brief": "docs/briefs/0001-url-shortener.md",
   "status": "running",
-  "iteration": 9,
+  "iteration": 10,
   "created": "2026-08-18T21:30:54Z",
-  "updated": "2026-08-18T22:46:47Z",
+  "updated": "2026-08-18T22:49:46Z",
   "tasks": [
     {
       "id": "T1",
@@ -247,7 +247,7 @@
         "The whole e2e run finishes in seconds."
       ],
       "verify": "d=$(mktemp -d) && npm run build && npm run test:e2e --silent -- --json --outputFile=\"$d/e2e.json\" >/dev/null && npm run test:e2e --silent -- --json --outputFile=\"$d/e2e-again.json\" >/dev/null && npm test --silent -- --json --outputFile=\"$d/unit.json\" >/dev/null && GATE_DIR=\"$d\" node -e 'const cp=require(\"node:child_process\"); const H=\"http://127.0.0.1:\"; const G=process.env.GATE_DIR; const URL1=\"https://example.com/a/very/long/path\"; const KIDS=[]; const kill=()=>{for(const k of KIDS){try{k.kill(\"SIGKILL\");}catch(e){}}}; const fail=(m)=>{console.error(\"GATE FAIL: \"+m);kill();process.exit(1);}; const done=()=>{kill();process.exit(0);}; const migrate=(db)=>{cp.execFileSync(\"npm\",[\"run\",\"--silent\",\"migrate\"],{env:Object.assign({},process.env,{DATABASE_PATH:db}),stdio:[\"ignore\",\"ignore\",\"inherit\"]});}; const boot=(port,env)=>{const p=cp.spawn(process.execPath,[\"dist/main.js\"],{env:Object.assign({},process.env,{PORT:String(port)},env),stdio:[\"ignore\",\"ignore\",\"inherit\"]});KIDS.push(p);return p;}; const stop=(p)=>new Promise(res=>{if(p.exitCode!==null||p.signalCode!==null){return res({code:p.exitCode,signal:p.signalCode});}const t=setTimeout(()=>{p.kill(\"SIGKILL\");},8000);t.unref();p.once(\"exit\",(code,signal)=>{clearTimeout(t);res({code:code,signal:signal});});p.kill(\"SIGTERM\");}); const up=async(port)=>{for(let i=0;i<200;i++){try{const r=await fetch(H+port+\"/health\");if(r.status===200){return true;}}catch(e){}await new Promise(r=>setTimeout(r,100));}return false;}; const post=(port,body)=>fetch(H+port+\"/links\",{method:\"POST\",headers:{\"content-type\":\"application/json\"},body:JSON.stringify(body)}); (async()=>{ const e=require(G+\"/e2e.json\"); if(e.success!==true||e.numFailedTests!==0){return fail(\"npm run test:e2e reported \"+e.numFailedTests+\" failing tests\");} if(e.numPassedTests<4){return fail(\"the e2e suite ran only \"+e.numPassedTests+\" passing tests; the worked example needs at least 4\");} const efiles=(e.testResults||[]).map(t=>String(t.name||t.testFilePath||\"\")); if(!efiles.some(f=>/e2e-spec\\.ts$/.test(f))){return fail(\"no test/*.e2e-spec.ts file ran under npm run test:e2e; files were: \"+efiles.join(\" \"));} const e2=require(G+\"/e2e-again.json\"); if(e2.success!==true||e2.numFailedTests!==0){return fail(\"the second consecutive npm run test:e2e reported \"+e2.numFailedTests+\" failing tests; the suite must not depend on leftover state or a hardcoded slug\");} if(e2.numPassedTests!==e.numPassedTests){return fail(\"the e2e suite ran \"+e.numPassedTests+\" tests then \"+e2.numPassedTests+\" on a second run\");} const u=require(G+\"/unit.json\"); if(u.success!==true||u.numFailedTests!==0){return fail(\"npm test reported \"+u.numFailedTests+\" failing tests\");} const ufiles=(u.testResults||[]).map(t=>String(t.name||t.testFilePath||\"\")); if(ufiles.some(f=>/e2e-spec\\.ts$/.test(f))){return fail(\"npm test also runs the e2e specs; the unit and e2e commands must be separate\");} done(); })().catch(e=>fail(String((e&&e.stack)||e)));'; rc=$?; rm -rf \"$d\"; exit $rc",
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "notes": ""
     },

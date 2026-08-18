@@ -4,9 +4,9 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **9/10 done** · iteration 10
+**Status:** running · **10/10 done** · iteration 11
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:49:46Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:53:10Z
 
 ## Progress
 
@@ -19,7 +19,7 @@
 - [x] **T7** — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
 - [x] **T8** — Serve a browsable Swagger UI at /api and the OpenAPI document at /api-json · 1 attempt(s)
 - [x] **T9** — Write the end-to-end acceptance test for the brief's worked example
-- [ ] **T10** — Prove the built artifact boots, shuts down cleanly, and keeps its links across a restart
+- [x] **T10** — Prove the built artifact boots, shuts down cleanly, and keeps its links across a restart
 
 ## Tasks
 
@@ -235,7 +235,7 @@ d=$(mktemp -d) && npm run build && npm run test:e2e --silent -- --json --outputF
 
 ### T10 — Prove the built artifact boots, shuts down cleanly, and keeps its links across a restart
 
-`pending` · depends on: T8, T9
+`done` · depends on: T8, T9
 
 Every other gate can be satisfied without the compiled application ever binding a port, which would let a broken build pass the entire suite. This task closes that hole: build, migrate a real SQLite file, start `dist/main.js` as a background process, exercise it over HTTP, stop it with SIGTERM, then start it again against the same file and check the links are still there with their hit counts. The work is the production edges — configuration through PORT and DATABASE_PATH, clean shutdown, no dev-only dependency at runtime — plus a README that records the commands.
 

@@ -170,3 +170,20 @@
 [36m[loop][0m cost=$0.2884632 turns=12 dur=32s error=false
 [36m[loop][0m    review: PASS
 [36m[loop][0m    T9 done
+[36m[loop][0m    committed 0af4748
+[36m[loop][0m   ── signals ──
+[36m[loop][0m   iterations:            10
+[36m[loop][0m   tasks closed:          9/10
+[36m[loop][0m   iterations per closed: 1.11
+[36m[loop][0m   gate failures:         0
+[36m[loop][0m   review rejections:     1
+[36m[loop][0m   attempts burned:       1
+[36m[loop][0m   no-progress streak:    0
+[36m[loop][0m   estimated spend:       $14.49 (estimate, not a bill)
+[36m[loop][0m ── iteration 11 (11/30 this run) · T10 · 9/10 done ──
+[36m[loop][0m    Prove the built artifact boots, shuts down cleanly, and keeps its links across a restart
+[36m[loop][0m cost=$1.0964178000000002 turns=28 dur=128s error=false
+[33m[loop][0m     5 permission denial(s) — the fence may be in the wrong place
+[36m[loop][0m cost=$0.32314529999999997 turns=16 dur=50s error=false
+[36m[loop][0m    review: PASS
+[36m[loop][0m    T10 done

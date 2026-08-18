@@ -1,0 +1,8 @@
+{
+  "task": "T10",
+  "outcome": "done",
+  "summary": "Added README.md documenting build, migrate, start, test and test:e2e with repo-relative paths; no source changes were needed since T2/T7/T8's prior work (explicit migrate step, enableShutdownHooks, PORT/DATABASE_PATH config) already satisfied the built-artifact boot/restart/shutdown behaviour T10 checks.",
+  "files": ["README.md"],
+  "verified": "Ran the T10 verify command's Node probe directly (build, migrate a throwaway sqlite file, boot dist/main.js with NODE_ENV=production, check /health, /api-json, POST /links -> 201, GET /:slug -> 302, SIGTERM shutdown, reboot against the same file, GET /links/:slug shows hits==1) and it exited 0 with no GATE FAIL; also ran `npm test` (10/10 passed) and `npm run test:e2e` (7/7 passed) to confirm nothing regressed.",
+  "notes": "src/main.ts already called app.enableShutdownHooks() and read PORT/DATABASE_PATH from env (from earlier tasks), and src/database/migrate.ts's explicit `npm run migrate` step was already the only path that creates the links table — none of that needed changes for T10. The only gap was the missing README.md, which this task adds, covering install/build/migrate/start/test/test:e2e all with repo-relative paths (data/links.db, dist/main.js, test/*.e2e-spec.ts), no absolute paths."
+}

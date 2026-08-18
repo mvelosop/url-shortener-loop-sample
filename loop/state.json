@@ -2,9 +2,9 @@
   "run_id": "0001-url-shortener",
   "brief": "docs/briefs/0001-url-shortener.md",
   "status": "running",
-  "iteration": 10,
+  "iteration": 11,
   "created": "2026-08-18T21:30:54Z",
-  "updated": "2026-08-18T22:49:46Z",
+  "updated": "2026-08-18T22:53:10Z",
   "tasks": [
     {
       "id": "T1",
@@ -275,7 +275,7 @@
         "`README.md` documents build, migrate, start, test and test:e2e using repo-relative paths only."
       ],
       "verify": "d=$(mktemp -d) && npm run build && GATE_DIR=\"$d\" node -e 'const cp=require(\"node:child_process\"); const H=\"http://127.0.0.1:\"; const G=process.env.GATE_DIR; const URL1=\"https://example.com/a/very/long/path\"; const KIDS=[]; const kill=()=>{for(const k of KIDS){try{k.kill(\"SIGKILL\");}catch(e){}}}; const fail=(m)=>{console.error(\"GATE FAIL: \"+m);kill();process.exit(1);}; const done=()=>{kill();process.exit(0);}; const migrate=(db)=>{cp.execFileSync(\"npm\",[\"run\",\"--silent\",\"migrate\"],{env:Object.assign({},process.env,{DATABASE_PATH:db}),stdio:[\"ignore\",\"ignore\",\"inherit\"]});}; const boot=(port,env)=>{const p=cp.spawn(process.execPath,[\"dist/main.js\"],{env:Object.assign({},process.env,{PORT:String(port)},env),stdio:[\"ignore\",\"ignore\",\"inherit\"]});KIDS.push(p);return p;}; const stop=(p)=>new Promise(res=>{if(p.exitCode!==null||p.signalCode!==null){return res({code:p.exitCode,signal:p.signalCode});}const t=setTimeout(()=>{p.kill(\"SIGKILL\");},8000);t.unref();p.once(\"exit\",(code,signal)=>{clearTimeout(t);res({code:code,signal:signal});});p.kill(\"SIGTERM\");}); const up=async(port)=>{for(let i=0;i<200;i++){try{const r=await fetch(H+port+\"/health\");if(r.status===200){return true;}}catch(e){}await new Promise(r=>setTimeout(r,100));}return false;}; const post=(port,body)=>fetch(H+port+\"/links\",{method:\"POST\",headers:{\"content-type\":\"application/json\"},body:JSON.stringify(body)}); (async()=>{ const db=G+\"/prod.db\"; migrate(db); let p=boot(3110,{DATABASE_PATH:db,NODE_ENV:\"production\"}); if(!(await up(3110))){return fail(\"the built artifact did not answer GET /health within 20s\");} const hb=await (await fetch(H+3110+\"/health\")).json().catch(()=>null); if(!hb||hb.status!==\"ok\"){return fail(\"GET /health body was \"+JSON.stringify(hb));} const jr=await fetch(H+3110+\"/api-json\"); if(jr.status!==200){return fail(\"GET /api-json returned \"+jr.status+\" from the built artifact\");} const doc=await jr.json(); if(!doc.paths||Object.keys(doc.paths).length<4){return fail(\"the served OpenAPI document lists \"+Object.keys(doc.paths||{}).length+\" paths, expected at least 4\");} const c=await post(3110,{url:URL1}); if(c.status!==201){return fail(\"POST /links returned \"+c.status+\" from the built artifact\");} const slug=(await c.json()).slug; const g=await fetch(H+3110+\"/\"+slug,{redirect:\"manual\"}); if(g.status!==302){return fail(\"GET /\"+slug+\" returned \"+g.status+\" from the built artifact\");} if(p.exitCode!==null||p.signalCode!==null){return fail(\"the server process died on its own with code \"+p.exitCode+\" signal \"+p.signalCode);} const s=await stop(p); if(s.code!==0&&s.code!==143&&s.signal!==\"SIGTERM\"){return fail(\"after SIGTERM the process exited with code \"+s.code+\" signal \"+s.signal);} p=boot(3110,{DATABASE_PATH:db,NODE_ENV:\"production\"}); if(!(await up(3110))){return fail(\"the server did not come back up against the existing sqlite file\");} const l=await fetch(H+3110+\"/links/\"+slug); if(l.status!==200){return fail(\"after a restart GET /links/\"+slug+\" returned \"+l.status+\"; links must survive a process restart\");} const lb=await l.json(); if(lb.url!==URL1){return fail(\"after a restart the link url was \"+JSON.stringify(lb.url));} if(lb.hits!==1){return fail(\"after a restart hits was \"+JSON.stringify(lb.hits)+\", expected 1\");} await stop(p); done(); })().catch(e=>fail(String((e&&e.stack)||e)));'; rc=$?; rm -rf \"$d\"; exit $rc",
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "notes": ""
     }

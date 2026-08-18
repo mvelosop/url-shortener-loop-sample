@@ -2,43 +2,43 @@
 > url-shortener@0.0.1 build
 > nest build
 
-(node:48306) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:55259) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 PASS test/links.e2e-spec.ts
   Links (e2e)
-    ✓ creates a link and returns 201 with a matching slug (19 ms)
+    ✓ creates a link and returns 201 with a matching slug (15 ms)
     ✓ reads the new link with hits at 0 (2 ms)
-    ✓ redirects to the target url, twice (2 ms)
-    ✓ reads the link again and sees both redirects counted
-    ✓ returns 404 for an unknown slug on both lookup routes (2 ms)
+    ✓ redirects to the target url, twice (3 ms)
+    ✓ reads the link again and sees both redirects counted (1 ms)
+    ✓ returns 404 for an unknown slug on both lookup routes (1 ms)
+    ✓ rejects a non-url with 400 (2 ms)
+    ✓ creates a second link for the same url with a different slug (1 ms)
+
+Test Suites: 1 passed, 1 total
+Tests:       7 passed, 7 total
+Snapshots:   0 total
+Time:        0.811 s, estimated 1 s
+Ran all test suites.
+Test results written to: ../../../../../../var/folders/g2/djnxzpd977q8pftlg1kl2zlr0000gn/T/tmp.eZvNEElmci/e2e.json
+(node:55352) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS test/links.e2e-spec.ts
+  Links (e2e)
+    ✓ creates a link and returns 201 with a matching slug (15 ms)
+    ✓ reads the new link with hits at 0 (2 ms)
+    ✓ redirects to the target url, twice (3 ms)
+    ✓ reads the link again and sees both redirects counted (1 ms)
+    ✓ returns 404 for an unknown slug on both lookup routes (1 ms)
     ✓ rejects a non-url with 400 (1 ms)
     ✓ creates a second link for the same url with a different slug (2 ms)
 
 Test Suites: 1 passed, 1 total
 Tests:       7 passed, 7 total
 Snapshots:   0 total
-Time:        0.841 s, estimated 1 s
+Time:        0.855 s, estimated 1 s
 Ran all test suites.
-Test results written to: ../../../../../../var/folders/g2/djnxzpd977q8pftlg1kl2zlr0000gn/T/tmp.CSxNFOvBtB/e2e.json
-(node:48404) ExperimentalWarning: SQLite is an experimental feature and might change at any time
-(Use `node --trace-warnings ...` to show where the warning was created)
-PASS test/links.e2e-spec.ts
-  Links (e2e)
-    ✓ creates a link and returns 201 with a matching slug (15 ms)
-    ✓ reads the new link with hits at 0 (1 ms)
-    ✓ redirects to the target url, twice (3 ms)
-    ✓ reads the link again and sees both redirects counted (1 ms)
-    ✓ returns 404 for an unknown slug on both lookup routes (1 ms)
-    ✓ rejects a non-url with 400 (2 ms)
-    ✓ creates a second link for the same url with a different slug (2 ms)
-
-Test Suites: 1 passed, 1 total
-Tests:       7 passed, 7 total
-Snapshots:   0 total
-Time:        0.775 s, estimated 1 s
-Ran all test suites.
-Test results written to: ../../../../../../var/folders/g2/djnxzpd977q8pftlg1kl2zlr0000gn/T/tmp.CSxNFOvBtB/e2e-again.json
-(node:48454) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+Test results written to: ../../../../../../var/folders/g2/djnxzpd977q8pftlg1kl2zlr0000gn/T/tmp.eZvNEElmci/e2e-again.json
+(node:55451) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
 PASS src/links/links.service.spec.ts
 PASS src/health/health.controller.spec.ts
@@ -47,6 +47,6 @@ PASS src/links/slug.generator.spec.ts
 Test Suites: 3 passed, 3 total
 Tests:       10 passed, 10 total
 Snapshots:   0 total
-Time:        0.75 s, estimated 1 s
+Time:        0.68 s, estimated 1 s
 Ran all test suites.
-Test results written to: ../../../../../../var/folders/g2/djnxzpd977q8pftlg1kl2zlr0000gn/T/tmp.CSxNFOvBtB/unit.json
+Test results written to: ../../../../../../var/folders/g2/djnxzpd977q8pftlg1kl2zlr0000gn/T/tmp.eZvNEElmci/unit.json

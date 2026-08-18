@@ -4,14 +4,14 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **1/10 done** · iteration 1
+**Status:** running · **2/10 done** · iteration 2
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:13:57Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:17:43Z
 
 ## Progress
 
 - [x] **T1** — Scaffold the NestJS project with a working build, two test commands and GET /health
-- [ ] **T2** — Create the links schema with an explicit npm run migrate step
+- [x] **T2** — Create the links schema with an explicit npm run migrate step
 - [ ] **T3** — Create a link with POST /links
 - [ ] **T4** — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
 - [ ] **T5** — Return 404 for an unknown slug on both lookup routes
@@ -49,7 +49,7 @@ d=$(mktemp -d) && npm run build && GATE_DIR="$d" node -e 'const cp=require("node
 
 ### T2 — Create the links schema with an explicit npm run migrate step
 
-`pending` · depends on: T1
+`done` · depends on: T1
 
 Persistence has to be real and the schema has to come from an explicit step, because a synchronise-on-boot would silently paper over a broken schema. This task adds the SQLite connection (file path from `DATABASE_PATH`) and a `npm run migrate` script that creates the `links` table, and it is what lets every later gate stand up a throwaway database. Nothing reads or writes rows yet — that starts in T3.
 

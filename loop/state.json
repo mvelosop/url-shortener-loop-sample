@@ -2,9 +2,9 @@
   "run_id": "0001-url-shortener",
   "brief": "docs/briefs/0001-url-shortener.md",
   "status": "running",
-  "iteration": 1,
+  "iteration": 2,
   "created": "2026-08-18T21:30:54Z",
-  "updated": "2026-08-18T22:13:57Z",
+  "updated": "2026-08-18T22:17:43Z",
   "tasks": [
     {
       "id": "T1",
@@ -59,7 +59,7 @@
         "`DATABASE_PATH` defaults to a repo-relative path (`data/links.db`); no absolute path appears in any source or config file."
       ],
       "verify": "d=$(mktemp -d) && npm run build && GATE_DIR=\"$d\" node -e 'const cp=require(\"node:child_process\"); const H=\"http://127.0.0.1:\"; const G=process.env.GATE_DIR; const URL1=\"https://example.com/a/very/long/path\"; const KIDS=[]; const kill=()=>{for(const k of KIDS){try{k.kill(\"SIGKILL\");}catch(e){}}}; const fail=(m)=>{console.error(\"GATE FAIL: \"+m);kill();process.exit(1);}; const done=()=>{kill();process.exit(0);}; const migrate=(db)=>{cp.execFileSync(\"npm\",[\"run\",\"--silent\",\"migrate\"],{env:Object.assign({},process.env,{DATABASE_PATH:db}),stdio:[\"ignore\",\"ignore\",\"inherit\"]});}; const boot=(port,env)=>{const p=cp.spawn(process.execPath,[\"dist/main.js\"],{env:Object.assign({},process.env,{PORT:String(port)},env),stdio:[\"ignore\",\"ignore\",\"inherit\"]});KIDS.push(p);return p;}; const stop=(p)=>new Promise(res=>{if(p.exitCode!==null||p.signalCode!==null){return res({code:p.exitCode,signal:p.signalCode});}const t=setTimeout(()=>{p.kill(\"SIGKILL\");},8000);t.unref();p.once(\"exit\",(code,signal)=>{clearTimeout(t);res({code:code,signal:signal});});p.kill(\"SIGTERM\");}); const up=async(port)=>{for(let i=0;i<200;i++){try{const r=await fetch(H+port+\"/health\");if(r.status===200){return true;}}catch(e){}await new Promise(r=>setTimeout(r,100));}return false;}; const post=(port,body)=>fetch(H+port+\"/links\",{method:\"POST\",headers:{\"content-type\":\"application/json\"},body:JSON.stringify(body)}); (async()=>{ const fs=require(\"node:fs\"); const sq=require(\"node:sqlite\"); const db1=G+\"/migrated.db\"; migrate(db1); migrate(db1); if(!fs.existsSync(db1)){return fail(\"npm run migrate did not create the database file at DATABASE_PATH\");} const h=new sq.DatabaseSync(db1); const tables=h.prepare(\"select name from sqlite_master where type = ?\").all(\"table\").map(r=>String(r.name).toLowerCase()); if(!tables.includes(\"links\")){return fail(\"after npm run migrate there is no links table; tables were: \"+tables.join(\",\"));} const cols=h.prepare(\"select * from pragma_table_info(?)\").all(\"links\"); const names=cols.map(c=>String(c.name).toLowerCase()); for(const c of [\"slug\",\"url\",\"hits\"]){if(!names.includes(c)){return fail(\"the links table has no \"+c+\" column; columns were: \"+names.join(\",\"));}} if(!names.includes(\"created_at\")&&!names.includes(\"createdat\")){return fail(\"the links table has no created-at column; columns were: \"+names.join(\",\"));} const pk=cols.filter(c=>c.pk>0).map(c=>String(c.name).toLowerCase()); const uniq=[]; for(const i of h.prepare(\"select * from pragma_index_list(?)\").all(\"links\")){if(i[\"unique\"]===1){const ic=h.prepare(\"select * from pragma_index_info(?)\").all(i.name).map(x=>String(x.name).toLowerCase());if(ic.length===1){uniq.push(ic[0]);}}} if(!pk.includes(\"slug\")&&!uniq.includes(\"slug\")){return fail(\"slug is neither the primary key nor covered by a unique index, so the database cannot enforce slug uniqueness\");} h.close(); const db2=G+\"/unmigrated.db\"; const p=boot(3102,{DATABASE_PATH:db2}); await up(3102); await new Promise(r=>setTimeout(r,1500)); await stop(p); if(fs.existsSync(db2)){const e=new sq.DatabaseSync(db2);const t2=e.prepare(\"select name from sqlite_master where type = ?\").all(\"table\").map(r=>String(r.name).toLowerCase());e.close();if(t2.includes(\"links\")){return fail(\"booting the app created the links table in an unmigrated database; the schema must come from npm run migrate only, never from synchronise-on-boot\");}} done(); })().catch(e=>fail(String((e&&e.stack)||e)));'; rc=$?; rm -rf \"$d\"; exit $rc",
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "notes": ""
     },

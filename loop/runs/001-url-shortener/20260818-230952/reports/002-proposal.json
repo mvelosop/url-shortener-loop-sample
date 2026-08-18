@@ -1,0 +1,13 @@
+{
+  "task": "T2",
+  "outcome": "done",
+  "summary": "Added the SQLite connection (DATABASE_PATH, default data/links.db) and an explicit `npm run migrate` script that creates the links table (slug primary key, url, hits, created_at); the app boots against it without ever creating the schema itself.",
+  "files": [
+    "package.json",
+    "src/database/database.module.ts",
+    "src/database/migrate.ts",
+    "src/app.module.ts"
+  ],
+  "verified": "The T2 verify command in loop/state.json (build, run migrate twice against a throwaway file and inspect the schema via node:sqlite, then boot dist/main.js against a never-migrated file and confirm no links table appears) exits 0. Also re-ran `npm test` (1 passed) and T1's verify command to confirm no regression.",
+  "notes": "Used Node 24's built-in node:sqlite (DatabaseSync) directly, no ORM — avoids native module builds under the no-network constraint, and the gate itself already assumes node:sqlite is available since it uses it to inspect the schema. migrate.ts exports `migrate()` and only calls it when run as the entrypoint (`require.main === module`); database.module.ts imports the same DEFAULT_DATABASE_PATH constant from migrate.ts, which is safe because importing the module does not trigger the migration (that import is what makes 'no synchronise-on-boot' hold). Both migrate.ts and the DatabaseModule factory create the DATABASE_PATH's parent directory (mkdirSync recursive) before opening the file — required because node:sqlite's DatabaseSync throws if the parent directory doesn't exist, but this is directory creation only, never schema creation, so the unmigrated-boot gate still sees no links table. The DATABASE_CONNECTION provider is exported from a @Global() DatabaseModule for T3+ to inject; nothing reads or writes rows yet. package.json's migrate script runs the built dist/database/migrate.js (npm run build already compiles src/database/migrate.ts alongside the rest via nest-cli's default src->dist mapping)."
+}

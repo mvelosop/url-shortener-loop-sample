@@ -1,0 +1,70 @@
+{
+  "is_error": false,
+  "duration_api_ms": 50394,
+  "num_turns": 16,
+  "stop_reason": "end_turn",
+  "session_id": "76446b22-b6ed-4a0e-9c27-2e0096239728",
+  "total_cost_usd": 0.5249565,
+  "usage": {
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 46642,
+    "cache_read_input_tokens": 624445,
+    "output_tokens": 3847,
+    "output_tokens_details": {
+      "thinking_tokens": 997
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 46642,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 187,
+        "cache_read_input_tokens": 69684,
+        "cache_creation_input_tokens": 1276,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1276
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 22,
+      "outputTokens": 3847,
+      "cacheReadInputTokens": 624445,
+      "cacheCreationInputTokens": 46642,
+      "webSearchRequests": 0,
+      "costUSD": 0.5249565,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "T2 **PASSES**. The migration creates the `links` table (slug PK, url, hits, created_at) idempotently via an explicit `npm run migrate` step; the `DatabaseModule` connection factory only opens the file (mkdir + `new DatabaseSync`) and never issues DDL, so booting against an unmigrated file correctly leaves no `links` table. Default path is repo-relative (`data/links.db`), no absolute paths in source, and scope stayed within the four listed files. All six acceptance criteria are met with evidence in the diff and gate log.",
+  "ttft_ms": 1573,
+  "ttft_stream_ms": 968,
+  "time_to_request_ms": 16,
+  "type": "result",
+  "duration_ms": 55733,
+  "uuid": "cbc11769-b9e6-4459-9200-b87883a9b0f4",
+  "phase": "review",
+  "iteration": 2
+}

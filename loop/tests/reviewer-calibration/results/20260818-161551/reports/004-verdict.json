@@ -1,0 +1,37 @@
+{
+  "task": "T4",
+  "verdict": "FAIL",
+  "criteria": [
+    {
+      "criterion": "A missing or malformed run directory exits 2",
+      "met": true,
+      "evidence": "src/runstat/cli.py main() catches RunError and returns 2; verified live: `runstat signals /tmp/nonexistent-run` exits 2, and a malformed sessions/001.json also exits 2."
+    },
+    {
+      "criterion": "A readable but empty run exits 1",
+      "met": false,
+      "evidence": "cli.py has no code path that ever returns 1 -- _signals() always returns 0 on success. Verified live: `runstat signals <empty-but-existing-dir>` exits 0 and prints a full all-zero signals report instead of failing."
+    },
+    {
+      "criterion": "On every failing path stdout is completely empty",
+      "met": false,
+      "evidence": "cli.py lines 20-22 in the diff: `print(f\"runstat: {exc}\")` (no file= kwarg, so stdout) runs unconditionally before the stderr print, with the comment 'whichever stream they are watching'. Verified live: both the missing-dir and malformed-file cases print the error to stdout as well as stderr."
+    },
+    {
+      "criterion": "On every failing path the explanation goes to stderr",
+      "met": true,
+      "evidence": "The second print() in the except block uses file=sys.stderr; verified live the message does appear on stderr. (It just also, wrongly, appears on stdout -- see above.)"
+    },
+    {
+      "criterion": "No traceback reaches the user",
+      "met": true,
+      "evidence": "All RunError paths are caught in main() and return 2 with a clean message; no traceback observed in any of the exercised failure paths (missing dir, malformed session file)."
+    }
+  ],
+  "findings": [
+    "2 of 5 acceptance criteria fail outright: stdout is never empty on a failing path (the exception handler deliberately prints the error to both stdout and stderr), and a readable-but-empty run exits 0 instead of the required 1 -- there is no code path that returns 1 at all.",
+    "tests/test_errors.py (the task's verify command) only asserts the exit code for the missing-directory case; it never asserts stdout is empty, never exercises the empty-run-exits-1 case, and never checks stderr content. The gate passing is not evidence the contract is met -- the diff itself and manual runs show it isn't.",
+    "loop/proposal.json's summary ('Implemented the task and verified it.') does not mention the stdout leak or the missing exit-1 path, despite these being directly observable by running the tool by hand."
+  ],
+  "notes": "Minimal fix for the next attempt: drop the stdout print() in the except block entirely, and add a branch (e.g. when a readable run has zero sessions and zero iterations) that returns 1 instead of 0 before the normal success print loop runs. The existing test_errors.py needs at least two more cases (empty-run exits 1, stdout empty on failure) or this will keep passing gates that don't test the contract."
+}

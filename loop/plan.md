@@ -4,9 +4,9 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **5/10 done** · iteration 5
+**Status:** running · **6/10 done** · iteration 6
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:26:30Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:29:40Z
 
 ## Progress
 
@@ -15,7 +15,7 @@
 - [x] **T3** — Create a link with POST /links
 - [x] **T4** — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
 - [x] **T5** — Return 404 for an unknown slug on both lookup routes
-- [ ] **T6** — Reject an invalid url with 400 naming the offending field
+- [x] **T6** — Reject an invalid url with 400 naming the offending field
 - [ ] **T7** — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
 - [ ] **T8** — Serve a browsable Swagger UI at /api and the OpenAPI document at /api-json
 - [ ] **T9** — Write the end-to-end acceptance test for the brief's worked example
@@ -142,7 +142,7 @@ d=$(mktemp -d) && npm run build && GATE_DIR="$d" node -e 'const cp=require("node
 
 ### T6 — Reject an invalid url with 400 naming the offending field
 
-`pending` · depends on: T3
+`done` · depends on: T3
 
 The only input the API takes is the url, so this is the whole of its validation surface. The brief pins which inputs are invalid (missing, empty, non-string, non-HTTP(S)) and requires the error to name the field, so a client can tell what it got wrong. Validation must reject without any network call — the service never checks that the url resolves, only that it is a syntactically valid http(s) url.
 

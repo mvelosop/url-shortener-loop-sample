@@ -1,0 +1,13 @@
+{
+  "task": "T6",
+  "outcome": "done",
+  "summary": "POST /links now validates the url field with class-validator decorators and a global ValidationPipe, returning 400 for missing/null/empty/non-string/non-http(s) urls while still accepting valid http:// and https:// urls.",
+  "files": [
+    "src/links/dto/create-link.dto.ts",
+    "src/main.ts",
+    "package.json",
+    "package-lock.json"
+  ],
+  "verified": "Ran T6's verify command from loop/state.json directly (bash extracted script): exit 0. Also re-ran T1-T5's verify commands (all exit 0) and npm test (1 passed) to confirm nothing else broke; npm run test:e2e still reports 'No tests found, exit 1', unchanged from before (T9's file to add).",
+  "notes": "Installed class-validator and class-transformer (not previously in package.json) since NestJS's ValidationPipe needs them; ran `npm install class-validator class-transformer --save`. CreateLinkDto now has @IsString/@IsNotEmpty/@IsUrl({protocols:['http','https'], require_protocol:true}) on url; class-validator validates undefined/null values against these decorators by default (no @IsOptional used), so a missing url field is rejected the same as an invalid one. main.ts adds `app.useGlobalPipes(new ValidationPipe({whitelist:true, transform:true}))` — this is the only place validation is wired, so it only takes effect for requests that go through the real Nest HTTP bootstrap (dist/main.js or a full app.listen()); an e2e test that builds a Nest testing module without replicating this pipe would not get validation. Left the default class-validator error messages as-is (e.g. 'url must be a URL address') since they already name the field, satisfying the gate's /url/i check on the response body; did not write a custom exceptionFactory."
+}

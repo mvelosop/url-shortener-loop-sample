@@ -1,0 +1,8 @@
+{
+  "task": "T5",
+  "outcome": "done",
+  "summary": "No code changes were needed: T4's LinksService.findBySlug/redirect already throw NestJS's built-in NotFoundException on a missing slug, which both LinksController (GET /links/:slug) and RedirectController (GET /:slug) surface as a 404 JSON body before any redirect or DB write happens.",
+  "files": [],
+  "verified": "Ran T5's verify command (npm run build, then boot dist/main.js against a fresh migrated SQLite db and probe both routes for a known slug, two unknown slugs, and a links-table row count) — exited 0. Also ran `npm test` (1/1 passing) and manually curled GET /nope99 and GET /links/nope99 against a locally booted instance to confirm no Location header on the 404 and a JSON body of the form {\"message\":\"No link found for slug \\\"nope99\\\"\",\"error\":\"Not Found\",\"statusCode\":404}.",
+  "notes": "T4 already implemented everything T5's acceptance criteria ask for (its own journal entry says as much but notes the T5 gate was never run). RedirectController's handler is decorated with @Redirect(), but NestJS's exception filters run before the redirect/response pipeline, so a thrown NotFoundException short-circuits cleanly to a 404 with no Location header — verified directly with curl, not just inferred. incrementHits() in links.repository.ts does an UPDATE ... WHERE slug = ? followed by a SELECT; on an unknown slug the UPDATE is a no-op (0 rows affected) and the SELECT returns undefined, so no row is ever created — confirmed via the verify script's post-run `select count(*) from links` check (== 1, only the link created during setup). npm run test:e2e still reports 'No tests found' with exit 1, unchanged from T1/T4 — that's T9's file to add, not touched here."
+}

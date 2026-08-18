@@ -4,9 +4,9 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **4/10 done** · iteration 4
+**Status:** running · **5/10 done** · iteration 5
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:24:13Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:26:30Z
 
 ## Progress
 
@@ -14,7 +14,7 @@
 - [x] **T2** — Create the links schema with an explicit npm run migrate step
 - [x] **T3** — Create a link with POST /links
 - [x] **T4** — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
-- [ ] **T5** — Return 404 for an unknown slug on both lookup routes
+- [x] **T5** — Return 404 for an unknown slug on both lookup routes
 - [ ] **T6** — Reject an invalid url with 400 naming the offending field
 - [ ] **T7** — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
 - [ ] **T8** — Serve a browsable Swagger UI at /api and the OpenAPI document at /api-json
@@ -119,7 +119,7 @@ d=$(mktemp -d) && npm run build && GATE_DIR="$d" node -e 'const cp=require("node
 
 ### T5 — Return 404 for an unknown slug on both lookup routes
 
-`pending` · depends on: T4
+`done` · depends on: T4
 
 An unknown slug is the common case for a public shortener, and it must be a clean 404 rather than a crash, a redirect to nowhere, or an empty 200. This covers both routes that take a slug, because they are handled by different controllers and it is easy to get one right and forget the other. A miss must also leave no trace in the database.
 

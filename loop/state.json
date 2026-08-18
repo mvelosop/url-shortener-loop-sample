@@ -2,9 +2,9 @@
   "run_id": "0001-url-shortener",
   "brief": "docs/briefs/0001-url-shortener.md",
   "status": "running",
-  "iteration": 4,
+  "iteration": 5,
   "created": "2026-08-18T21:30:54Z",
-  "updated": "2026-08-18T22:24:13Z",
+  "updated": "2026-08-18T22:26:30Z",
   "tasks": [
     {
       "id": "T1",
@@ -139,7 +139,7 @@
         "Looking up unknown slugs creates no rows in the `links` table."
       ],
       "verify": "d=$(mktemp -d) && npm run build && GATE_DIR=\"$d\" node -e 'const cp=require(\"node:child_process\"); const H=\"http://127.0.0.1:\"; const G=process.env.GATE_DIR; const URL1=\"https://example.com/a/very/long/path\"; const KIDS=[]; const kill=()=>{for(const k of KIDS){try{k.kill(\"SIGKILL\");}catch(e){}}}; const fail=(m)=>{console.error(\"GATE FAIL: \"+m);kill();process.exit(1);}; const done=()=>{kill();process.exit(0);}; const migrate=(db)=>{cp.execFileSync(\"npm\",[\"run\",\"--silent\",\"migrate\"],{env:Object.assign({},process.env,{DATABASE_PATH:db}),stdio:[\"ignore\",\"ignore\",\"inherit\"]});}; const boot=(port,env)=>{const p=cp.spawn(process.execPath,[\"dist/main.js\"],{env:Object.assign({},process.env,{PORT:String(port)},env),stdio:[\"ignore\",\"ignore\",\"inherit\"]});KIDS.push(p);return p;}; const stop=(p)=>new Promise(res=>{if(p.exitCode!==null||p.signalCode!==null){return res({code:p.exitCode,signal:p.signalCode});}const t=setTimeout(()=>{p.kill(\"SIGKILL\");},8000);t.unref();p.once(\"exit\",(code,signal)=>{clearTimeout(t);res({code:code,signal:signal});});p.kill(\"SIGTERM\");}); const up=async(port)=>{for(let i=0;i<200;i++){try{const r=await fetch(H+port+\"/health\");if(r.status===200){return true;}}catch(e){}await new Promise(r=>setTimeout(r,100));}return false;}; const post=(port,body)=>fetch(H+port+\"/links\",{method:\"POST\",headers:{\"content-type\":\"application/json\"},body:JSON.stringify(body)}); (async()=>{ const sq=require(\"node:sqlite\"); const db=G+\"/t5.db\"; migrate(db); const p=boot(3105,{DATABASE_PATH:db}); if(!(await up(3105))){return fail(\"the server did not come up on port 3105\");} const c=await post(3105,{url:URL1}); if(c.status!==201){return fail(\"POST /links returned \"+c.status+\" while setting up the 404 checks\");} const known=(await c.json()).slug; const kg=await fetch(H+3105+\"/\"+known,{redirect:\"manual\"}); if(kg.status!==302){return fail(\"GET /\"+known+\" for a known slug returned \"+kg.status+\"; a blanket 404 is not a 404 for unknown slugs only\");} const kl=await fetch(H+3105+\"/links/\"+known); if(kl.status!==200){return fail(\"GET /links/\"+known+\" for a known slug returned \"+kl.status+\"; a blanket 404 is not a 404 for unknown slugs only\");} for(const s of [\"nope99\",\"aaaaaa\"]){ const g=await fetch(H+3105+\"/\"+s,{redirect:\"manual\"}); if(g.status!==404){return fail(\"GET /\"+s+\" returned \"+g.status+\", expected 404\");} const l=await fetch(H+3105+\"/links/\"+s); if(l.status!==404){return fail(\"GET /links/\"+s+\" returned \"+l.status+\", expected 404\");} const lj=await l.json().catch(()=>null); if(!lj||typeof lj.message!==\"string\"){return fail(\"the 404 for /links/\"+s+\" was not a JSON body with a message; got \"+JSON.stringify(lj));} } const hh=await fetch(H+3105+\"/health\"); if(hh.status!==200){return fail(\"GET /health returned \"+hh.status+\" while unknown slugs 404\");} await stop(p); const h=new sq.DatabaseSync(db); const n=h.prepare(\"select count(*) as c from links\").get().c; h.close(); if(Number(n)!==1){return fail(\"the links table holds \"+n+\" rows, expected exactly the 1 link created here; looking up unknown slugs must create nothing\");} done(); })().catch(e=>fail(String((e&&e.stack)||e)));'; rc=$?; rm -rf \"$d\"; exit $rc",
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "notes": ""
     },

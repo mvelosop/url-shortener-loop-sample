@@ -4,13 +4,13 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** max_iterations · **0/10 done** · iteration 0
+**Status:** running · **1/10 done** · iteration 1
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T21:31:55Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:13:57Z
 
 ## Progress
 
-- [ ] **T1** — Scaffold the NestJS project with a working build, two test commands and GET /health
+- [x] **T1** — Scaffold the NestJS project with a working build, two test commands and GET /health
 - [ ] **T2** — Create the links schema with an explicit npm run migrate step
 - [ ] **T3** — Create a link with POST /links
 - [ ] **T4** — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
@@ -25,7 +25,7 @@
 
 ### T1 — Scaffold the NestJS project with a working build, two test commands and GET /health
 
-`pending` · depends on: none
+`done` · depends on: none
 
 This repo is greenfield: it holds the loop, the brief and nothing else. This task creates the NestJS + TypeScript project that every later task builds on, and fixes the two things every later gate depends on — that `npm run build` produces `dist/main.js`, and that the built artifact boots and answers `GET /health`. It also wires the two test commands (`npm test` for unit specs, `npm run test:e2e` for supertest end-to-end specs) so that later tasks have somewhere to put tests. Build only the health slice: no links controller, service or entity yet.
 

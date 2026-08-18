@@ -1,0 +1,94 @@
+{
+  "is_error": false,
+  "duration_api_ms": 138742,
+  "num_turns": 36,
+  "stop_reason": "end_turn",
+  "session_id": "15f9e797-e58a-41d7-a20f-5b164c6b338e",
+  "total_cost_usd": 1.2699578999999999,
+  "usage": {
+    "input_tokens": 72,
+    "cache_creation_input_tokens": 57245,
+    "cache_read_input_tokens": 2484823,
+    "output_tokens": 12055,
+    "output_tokens_details": {
+      "thinking_tokens": 2944
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 57245,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 126,
+        "cache_read_input_tokens": 80572,
+        "cache_creation_input_tokens": 991,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 991
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 72,
+      "outputTokens": 12055,
+      "cacheReadInputTokens": 2484823,
+      "cacheCreationInputTokens": 57245,
+      "webSearchRequests": 0,
+      "costUSD": 1.2699578999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01DJN1ygCzKLo5HcawiXjrhY",
+      "tool_input": {
+        "command": "d=$(mktemp -d) && npm run build && GATE_DIR=\"$d\" node -e 'const cp=require(\"node:child_process\"); const H=\"http://127.0.0.1:\"; const G=process.env.GATE_DIR; const URL1=\"https://example.com/a/very/long/path\"; const KIDS=[]; const kill=()=>{for(const k of KIDS){try{k.kill(\"SIGKILL\");}catch(e){}}}; const fail=(m)=>{console.error(\"GATE FAIL: \"+m);kill();process.exit(1);}; const done=()=>{kill();process.exit(0);}; const migrate=(db)=>{cp.execFileSync(\"npm\",[\"run\",\"--silent\",\"migrate\"],{env:Object.assign({},process.env,{DATABASE_PATH:db}),stdio:[\"ignore\",\"ignore\",\"inherit\"]});}; const boot=(port,env)=>{const p=cp.spawn(process.execPath,[\"dist/main.js\"],{env:Object.assign({},process.env,{PORT:String(port)},env),stdio:[\"ignore\",\"ignore\",\"inherit\"]});KIDS.push(p);return p;}; const stop=(p)=>new Promise(res=>{if(p.exitCode!==null||p.signalCode!==null){return res({code:p.exitCode,signal:p.signalCode});}const t=setTimeout(()=>{p.kill(\"SIGKILL\");},8000);t.unref();p.once(\"exit\",(code,signal)=>{clearTimeout(t);res({code:code,signal:signal});});p.kill(\"SIGTERM\");}); const up=async(port)=>{for(let i=0;i<200;i++){try{const r=await fetch(H+port+\"/health\");if(r.status===200){return true;}}catch(e){}await new Promise(r=>setTimeout(r,100));}return false;}; const post=(port,body)=>fetch(H+port+\"/links\",{method:\"POST\",headers:{\"content-type\":\"application/json\"},body:JSON.stringify(body)}); (async()=>{ const db=G+\"/t1.db\"; try{migrate(db);}catch(e){} const p=boot(3101,{DATABASE_PATH:db}); if(!(await up(3101))){return fail(\"dist/main.js did not answer GET /health with 200 on port 3101 within 20s\");} const r=await fetch(H+3101+\"/health\"); if(r.status!==200){return fail(\"GET /health returned \"+r.status);} const b=await r.json().catch(()=>null); if(!b||b.status!==\"ok\"){return fail(\"GET /health body was \"+JSON.stringify(b)+\", expected {status:ok}\");} const s=await stop(p); if(s.code!==0&&s.signal!==\"SIGTERM\"){return fail(\"the server exited with code \"+s.code+\" signal \"+s.signal);} done(); })().catch(e=>fail(String((e&&e.stack)||e)));' && npm test --silent -- --json --outputFile=\"$d/unit.json\" >/dev/null && GATE_DIR=\"$d\" node -e 'const cp=require(\"node:child_process\"); const G=process.env.GATE_DIR; const fail=(m)=>{console.error(\"GATE FAIL: \"+m);process.exit(1);}; const u=require(G+\"/unit.json\"); if(u.success!==true||u.numFailedTests!==0){return fail(\"npm test reported \"+u.numFailedTests+\" failing tests\");} if(u.numPassedTests<1){return fail(\"npm test ran \"+u.numTotalTests+\" tests and passed \"+u.numPassedTests);} console.log(\"OK\"); process.exit(0);'; rc=$?; rm -rf \"$d\"; echo \"FINAL RC: $rc\"",
+        "timeout": 60000
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_015r5iNdj8dT628J5b4fQHeX",
+      "tool_input": {
+        "command": "d=$(mktemp -d) && GATE_DIR=\"$d\" node /tmp/t1gate/check.js; rc=$?; rm -rf \"$d\"; echo \"RC=$rc\"",
+        "timeout": 30000
+      }
+    },
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_0153XFj6BxXfDgdr4e8PdEHs",
+      "tool_input": {
+        "command": "rm -rf /tmp/t1gate; git status --porcelain"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "T1 is complete: the NestJS project is scaffolded with a working build, `GET /health` boots and responds correctly, SIGTERM shuts it down cleanly, and `npm test` passes with a real test. `loop/proposal.json` is written with `outcome: \"done\"`. As instructed, I did not touch `loop/state.json`, did not commit, and stopped after this one task.",
+  "ttft_ms": 1835,
+  "ttft_stream_ms": 1245,
+  "time_to_request_ms": 34,
+  "type": "result",
+  "duration_ms": 181056,
+  "uuid": "508edebe-465d-4caa-9303-d183b3675fc2",
+  "phase": "work",
+  "iteration": 1
+}

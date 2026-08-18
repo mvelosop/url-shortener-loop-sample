@@ -43,3 +43,10 @@ One gate is weaker than the rest and you should know it: **T9 can only read jest
 - **Run:** `20260818-221720` · 0 iteration(s) this run
 - **Plan:** 0/10 done, 0 blocked
 - **Signals:** 0 iterations · n/a per closed · 0 gate failure(s) · 0 review rejection(s) · 0 attempt(s) burned · streak 0 · ~$3.95
+
+## T1 — Scaffold the NestJS project with a working build, two test commands and GET /health
+
+- **Outcome:** done (review: PASS)
+- **Summary:** Scaffolded the NestJS + TypeScript project: package.json, tsconfig(.build).json, nest-cli.json, src/main.ts, src/app.module.ts, a health slice (controller + spec) answering GET /health, and a separate jest-e2e config for test/*.e2e-spec.ts.
+- **Files:** package.json, tsconfig.json, tsconfig.build.json, nest-cli.json, src/main.ts, src/app.module.ts, src/health/health.controller.ts, src/health/health.controller.spec.ts, test/jest-e2e.json, .gitignore
+- **Notes for next iteration:** package.json omits a `migrate` script on purpose — T2 owns src/database/migrate.ts and should add the script when it adds the file; adding it now would reference a nonexistent script, which is why the T1 gate's `try{migrate(db)}catch(e){}` swallows the failure. `npm run test:e2e` exists and is wired to test/jest-e2e.json with supertest installed, but currently exits 1 with 'No tests found' since no *.e2e-spec.ts file exists yet (that's T9) — this is expected and matches the brief's warning not to gate scaffolding on an empty suite; T1's own gate never invokes test:e2e. Used @nestjs/core ^10.4.15 (Nest 10, not 11) since it's the stable line paired with @nestjs/cli ^10.4.9; nothing in the brief pins a major version.

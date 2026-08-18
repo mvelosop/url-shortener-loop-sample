@@ -2,3 +2,9 @@
 loop/proposal.json
 loop/verdict.json
 loop/.running
+
+node_modules/
+dist/
+coverage/
+data/
+*.tsbuildinfo

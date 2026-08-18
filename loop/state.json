@@ -2,9 +2,9 @@
   "run_id": "0001-url-shortener",
   "brief": "docs/briefs/0001-url-shortener.md",
   "status": "running",
-  "iteration": 2,
+  "iteration": 3,
   "created": "2026-08-18T21:30:54Z",
-  "updated": "2026-08-18T22:17:43Z",
+  "updated": "2026-08-18T22:20:35Z",
   "tasks": [
     {
       "id": "T1",
@@ -88,7 +88,7 @@
         "The service never fetches or resolves the target url, and makes no outbound network call of any kind."
       ],
       "verify": "d=$(mktemp -d) && npm run build && GATE_DIR=\"$d\" node -e 'const cp=require(\"node:child_process\"); const H=\"http://127.0.0.1:\"; const G=process.env.GATE_DIR; const URL1=\"https://example.com/a/very/long/path\"; const KIDS=[]; const kill=()=>{for(const k of KIDS){try{k.kill(\"SIGKILL\");}catch(e){}}}; const fail=(m)=>{console.error(\"GATE FAIL: \"+m);kill();process.exit(1);}; const done=()=>{kill();process.exit(0);}; const migrate=(db)=>{cp.execFileSync(\"npm\",[\"run\",\"--silent\",\"migrate\"],{env:Object.assign({},process.env,{DATABASE_PATH:db}),stdio:[\"ignore\",\"ignore\",\"inherit\"]});}; const boot=(port,env)=>{const p=cp.spawn(process.execPath,[\"dist/main.js\"],{env:Object.assign({},process.env,{PORT:String(port)},env),stdio:[\"ignore\",\"ignore\",\"inherit\"]});KIDS.push(p);return p;}; const stop=(p)=>new Promise(res=>{if(p.exitCode!==null||p.signalCode!==null){return res({code:p.exitCode,signal:p.signalCode});}const t=setTimeout(()=>{p.kill(\"SIGKILL\");},8000);t.unref();p.once(\"exit\",(code,signal)=>{clearTimeout(t);res({code:code,signal:signal});});p.kill(\"SIGTERM\");}); const up=async(port)=>{for(let i=0;i<200;i++){try{const r=await fetch(H+port+\"/health\");if(r.status===200){return true;}}catch(e){}await new Promise(r=>setTimeout(r,100));}return false;}; const post=(port,body)=>fetch(H+port+\"/links\",{method:\"POST\",headers:{\"content-type\":\"application/json\"},body:JSON.stringify(body)}); (async()=>{ const sq=require(\"node:sqlite\"); const db=G+\"/t3.db\"; migrate(db); const p=boot(3103,{DATABASE_PATH:db}); if(!(await up(3103))){return fail(\"the server did not come up on port 3103\");} const r=await post(3103,{url:URL1}); if(r.status!==201){return fail(\"POST /links returned \"+r.status+\", expected 201\");} const b=await r.json(); if(typeof b.slug!==\"string\"||!/^[A-Za-z0-9]{6}$/.test(b.slug)){return fail(\"slug was \"+JSON.stringify(b.slug)+\", expected 6 characters of [A-Za-z0-9]\");} if(b.url!==URL1){return fail(\"url came back as \"+JSON.stringify(b.url));} if(b.hits!==0){return fail(\"hits was \"+JSON.stringify(b.hits)+\", expected the number 0\");} if(typeof b.createdAt!==\"string\"||isNaN(Date.parse(b.createdAt))){return fail(\"createdAt was \"+JSON.stringify(b.createdAt));} if(b.createdAt!==new Date(b.createdAt).toISOString()){return fail(\"createdAt was \"+b.createdAt+\", expected ISO-8601 UTC with milliseconds\");} const r2=await post(3103,{url:URL1}); if(r2.status!==201){return fail(\"the second POST of the same url returned \"+r2.status+\", expected 201\");} const b2=await r2.json(); if(b2.slug===b.slug){return fail(\"the same url twice produced the same slug \"+b.slug+\"; there must be no de-duplication\");} await stop(p); const h=new sq.DatabaseSync(db); const rows=h.prepare(\"select slug,url from links\").all(); h.close(); if(rows.length!==2){return fail(\"expected 2 rows in the links table after two creates, found \"+rows.length);} if(!rows.some(x=>x.slug===b.slug&&x.url===URL1)){return fail(\"the created link was not persisted to sqlite\");} done(); })().catch(e=>fail(String((e&&e.stack)||e)));'; rc=$?; rm -rf \"$d\"; exit $rc",
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "notes": ""
     },

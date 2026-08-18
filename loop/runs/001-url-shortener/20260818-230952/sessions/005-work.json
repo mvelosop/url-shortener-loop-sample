@@ -1,0 +1,70 @@
+{
+  "is_error": false,
+  "duration_api_ms": 71670,
+  "num_turns": 23,
+  "stop_reason": "end_turn",
+  "session_id": "0ff83f70-3fcc-4e9b-aeb1-ae53aa3fbf17",
+  "total_cost_usd": 0.7666763999999999,
+  "usage": {
+    "input_tokens": 36,
+    "cache_creation_input_tokens": 51181,
+    "cache_read_input_tokens": 1187558,
+    "output_tokens": 6881,
+    "output_tokens_details": {
+      "thinking_tokens": 2181
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 51181,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 141,
+        "cache_read_input_tokens": 74536,
+        "cache_creation_input_tokens": 963,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 963
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 36,
+      "outputTokens": 6881,
+      "cacheReadInputTokens": 1187558,
+      "cacheCreationInputTokens": 51181,
+      "webSearchRequests": 0,
+      "costUSD": 0.7666763999999999,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "T3 is done. I implemented `POST /links` (links module, controller, service, repository, and DTO), wired it into `app.module.ts`, and verified it against T3's gate as well as re-running T1's and T2's gates and the full unit suite — all pass. Proposal written to `loop/proposal.json` with outcome `done`; per the skill's rules I haven't touched `loop/state.json`, the journal, or made any commits.",
+  "ttft_ms": 2167,
+  "ttft_stream_ms": 1642,
+  "time_to_request_ms": 17,
+  "type": "result",
+  "duration_ms": 88721,
+  "uuid": "6b669791-2b1c-4792-8e51-3e3c583d046c",
+  "phase": "work",
+  "iteration": 3
+}

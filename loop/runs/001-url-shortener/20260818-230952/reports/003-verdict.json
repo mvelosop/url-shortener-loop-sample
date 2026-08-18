@@ -1,0 +1,43 @@
+{
+  "task": "T3",
+  "verdict": "PASS",
+  "criteria": [
+    {
+      "criterion": "`POST /links` with body {\"url\": \"https://example.com/a/very/long/path\"} returns 201.",
+      "met": true,
+      "evidence": "LinksController.create is a bare @Post() handler (src/links/links.controller.ts:10-13); Nest defaults POST to 201. Confirmed by re-running T3's verify command directly: exit 0."
+    },
+    {
+      "criterion": "The response body has exactly the fields slug, url, hits and createdAt.",
+      "met": true,
+      "evidence": "LinksRepository.create returns `{ slug, url, hits: 0, createdAt }` (src/links/links.repository.ts:20), matching the LinkRecord interface with no extra fields; controller returns it directly."
+    },
+    {
+      "criterion": "slug matches ^[A-Za-z0-9]{6}$, url is the submitted url unchanged, and hits is the number 0 (not the string \"0\").",
+      "met": true,
+      "evidence": "generateSlug() in links.service.ts:9-16 draws from a 62-char alphabet for exactly SLUG_LENGTH=6 chars; url is passed through unmodified; hits:0 is a numeric literal in the returned object (links.repository.ts:20), not read back from sqlite."
+    },
+    {
+      "criterion": "createdAt is an ISO-8601 UTC timestamp with milliseconds.",
+      "met": true,
+      "evidence": "links.service.ts:24 uses `new Date().toISOString()`, which always yields the millisecond-precision UTC format the gate checks with `toISOString()` round-trip."
+    },
+    {
+      "criterion": "The link is written to the `links` table in the SQLite file named by DATABASE_PATH, and is still there after the process exits.",
+      "met": true,
+      "evidence": "LinksRepository.create runs an INSERT against the injected DATABASE_CONNECTION (links.repository.ts:17-19), which database.module.ts opens against process.env.DATABASE_PATH. Gate re-run reads the rows back with a fresh DatabaseSync handle after stopping the server and finds them."
+    },
+    {
+      "criterion": "Submitting the same url twice creates two independent rows with different slugs — there is no de-duplication.",
+      "met": true,
+      "evidence": "create() always calls generateSlug() and always inserts a new row; there is no lookup-by-url anywhere in the repository or service. Gate re-run posted the same url twice and got two distinct slugs and two rows."
+    },
+    {
+      "criterion": "The service never fetches or resolves the target url, and makes no outbound network call of any kind.",
+      "met": true,
+      "evidence": "links.service.ts and links.repository.ts contain no fetch/http/dns/network calls — url is only stored and echoed back."
+    }
+  ],
+  "findings": [],
+  "notes": "Slug generation is a free function inline in the service rather than an injectable provider, and CreateLinkDto has no validation decorators — both correctly deferred to T7 and T6 per this task's own goal text ('Slug generation only has to produce a well-formed slug here...validation of bad input is T6's'). File set matches state.json's files list exactly, no scope creep. Re-ran T3's verify command directly (not just trusting the gate log, which only shows build warnings since the gate script prints nothing on success) — exit 0."
+}

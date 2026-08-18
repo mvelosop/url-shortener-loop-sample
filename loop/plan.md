@@ -4,15 +4,15 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **2/10 done** · iteration 2
+**Status:** running · **3/10 done** · iteration 3
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:17:43Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:20:35Z
 
 ## Progress
 
 - [x] **T1** — Scaffold the NestJS project with a working build, two test commands and GET /health
 - [x] **T2** — Create the links schema with an explicit npm run migrate step
-- [ ] **T3** — Create a link with POST /links
+- [x] **T3** — Create a link with POST /links
 - [ ] **T4** — Redirect on GET /:slug, counting hits, and read a link with GET /links/:slug
 - [ ] **T5** — Return 404 for an unknown slug on both lookup routes
 - [ ] **T6** — Reject an invalid url with 400 naming the offending field
@@ -72,7 +72,7 @@ d=$(mktemp -d) && npm run build && GATE_DIR="$d" node -e 'const cp=require("node
 
 ### T3 — Create a link with POST /links
 
-`pending` · depends on: T2
+`done` · depends on: T2
 
 This is the first behaviour of the API: accept a long url and hand back a stored link with a generated slug. It establishes the link representation ({slug, url, hits, createdAt}) that every other endpoint returns, and the repository write path that T4 reads back. Slug generation only has to produce a well-formed slug here; uniqueness under collision is T7's problem, and validation of bad input is T6's.
 

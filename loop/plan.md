@@ -4,9 +4,9 @@
      Do NOT edit: regenerated on every state change, your edits will be lost.
      The source of truth is loop/state.json. -->
 
-**Status:** running · **7/10 done** · iteration 7
+**Status:** running · **7/10 done** · iteration 8
 
-**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:35:20Z
+**Brief:** `docs/briefs/0001-url-shortener.md` · **Updated:** 2026-08-18T22:41:16Z
 
 ## Progress
 
@@ -17,7 +17,7 @@
 - [x] **T5** — Return 404 for an unknown slug on both lookup routes
 - [x] **T6** — Reject an invalid url with 400 naming the offending field
 - [x] **T7** — Guarantee unique slugs: seedable generation, collision retry, 500 only after five
-- [ ] **T8** — Serve a browsable Swagger UI at /api and the OpenAPI document at /api-json
+- [ ] **T8** — Serve a browsable Swagger UI at /api and the OpenAPI document at /api-json · 1 attempt(s)
 - [ ] **T9** — Write the end-to-end acceptance test for the brief's worked example
 - [ ] **T10** — Prove the built artifact boots, shuts down cleanly, and keeps its links across a restart
 
@@ -188,7 +188,7 @@ d=$(mktemp -d) && npm run build && GATE_DIR="$d" node -e 'const cp=require("node
 
 ### T8 — Serve a browsable Swagger UI at /api and the OpenAPI document at /api-json
 
-`pending` · depends on: T4
+`pending` · 1 attempt(s) · depends on: T4
 
 The API has no web UI, so the Swagger page is the only way to look at it by hand. The document must be generated from the code by @nestjs/swagger — decorators on the controllers and DTOs — so that it cannot drift from the implementation; a hand-maintained spec file would defeat the point. All four functional paths must appear, and the create operation must describe both its request body and the link it returns.
 
@@ -200,6 +200,8 @@ The API has no web UI, so the Swagger page is the only way to look at it by hand
 - The POST /links operation documents its request body including the `url` property.
 - The POST /links operation documents a 201 response whose schema describes slug, url, hits and createdAt.
 - Adding the documentation changes no behaviour: every status code and response body from T3 to T7 is unchanged.
+
+**From the last attempt:** The task's whole point — per its own goal text ('a hand-maintained spec file would defeat the point') and the brief ('The document is generated from the code, not hand-written, so it cannot drift') — is that the OpenAPI document must be derived from decorators on the DTOs, not hand-authored. The work session did the opposite for the one place that mattered: it added @ApiProperty to CreateLinkDto, then bypassed it entirely with a hand-written inline @ApiBody schema on the controller that duplicates the same field by hand. Verified live: components.schemas in the generated document never contains CreateLinkDto. The work session's own notes admit this was done to satisfy the verify script's literal JSON.stringify(op.requestBody) substring check (a $ref to CreateLinkDto wouldn't contain the string 'url' at that site) and that future DTO changes must now be kept in sync by hand — i.e. it knowingly reintroduced the exact drift risk this task exists to eliminate.
 
 <details><summary>verify command</summary>
 

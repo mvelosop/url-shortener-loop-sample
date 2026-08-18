@@ -1,0 +1,78 @@
+{
+  "is_error": false,
+  "duration_api_ms": 90577,
+  "num_turns": 17,
+  "stop_reason": "end_turn",
+  "session_id": "3cb88f74-5d0a-4a99-9d40-dec5997c47e0",
+  "total_cost_usd": 0.4411326,
+  "usage": {
+    "input_tokens": 20,
+    "cache_creation_input_tokens": 30643,
+    "cache_read_input_tokens": 429082,
+    "output_tokens": 8566,
+    "output_tokens_details": {
+      "thinking_tokens": 4390
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 30643,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 240,
+        "cache_read_input_tokens": 51281,
+        "cache_creation_input_tokens": 3680,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 3680
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 20,
+      "outputTokens": 8566,
+      "cacheReadInputTokens": 429082,
+      "cacheCreationInputTokens": 30643,
+      "webSearchRequests": 0,
+      "costUSD": 0.4411326,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01KBovD8aD1FMxguC5eYeRfM",
+      "tool_input": {
+        "command": "d=$(mktemp -d)\nDATABASE_PATH=\"$d/t8.db\" npm run --silent migrate >/tmp/migrate.log 2>&1\nPORT=3199 DATABASE_PATH=\"$d/t8.db\" node dist/main.js >/tmp/server.log 2>&1 &\nSPID=$!\nsleep 2\ncurl -s http://127.0.0.1:3199/api-json -o /tmp/openapi.json\nkill -TERM $SPID\nsleep 1\npython3 -c \"\nimport json\ndoc = json.load(open('/tmp/openapi.json'))\nprint(json.dumps(doc['paths']['/links']['post'], indent=2))\nprint('---schemas---')\nprint(list(doc.get('components',{}).get('schemas',{}).keys()))\nprint(json.dumps(doc.get('components',{}).get('schemas',{}).get('CreateLinkDto'), indent=2))\n\"\nrm -rf \"$d\"\n"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "T8 fails review: the request body documentation for `POST /links` is hand-written (an inline `@ApiBody` schema literal duplicating the `url` field) rather than derived from `CreateLinkDto`'s own `@ApiProperty` decorator — confirmed live that `CreateLinkDto` never appears in `components.schemas` of the generated document. This directly contradicts the task's own goal and the brief's explicit requirement that the doc \"is generated from the code, not hand-written, so it cannot drift.\" The work session's notes acknowledge this was done to satisfy a literal substring check in the verify script, at the cost of reintroducing the drift risk the task exists to prevent. Verdict written to `loop/verdict.json`.",
+  "ttft_ms": 1640,
+  "ttft_stream_ms": 1027,
+  "time_to_request_ms": 21,
+  "type": "result",
+  "duration_ms": 97527,
+  "uuid": "970bbb1c-1861-4d03-8452-096fc116c8bf",
+  "phase": "review",
+  "iteration": 8
+}

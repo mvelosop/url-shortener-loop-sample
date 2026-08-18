@@ -2,9 +2,9 @@
 > url-shortener@0.0.1 build
 > nest build
 
-(node:15418) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:28139) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
-(node:15396) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:28117) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)
-(node:15419) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:28140) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node --trace-warnings ...` to show where the warning was created)

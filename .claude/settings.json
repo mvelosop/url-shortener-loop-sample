@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "includeCoAuthoredBy": false,
+  "permissions": {
+    "allow": [
+      "Bash(cat:*)",
+      "Bash(cp:*)",
+      "Bash(curl:*)",
+      "Bash(find:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)",
+      "Bash(git status:*)",
+      "Bash(head:*)",
+      "Bash(jq:*)",
+      "Bash(kill:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(node:*)",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(rm:*)",
+      "Bash(sleep:*)",
+      "Bash(sqlite3:*)",
+      "Bash(tail:*)",
+      "Bash(touch:*)",
+      "Bash(wc:*)",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Read",
+      "TodoWrite",
+      "Write"
+    ],
+    "deny": [
+      "Bash(git push:*)",
+      "Bash(git commit:*)",
+      "Bash(git reset:*)",
+      "Bash(git clean:*)",
+      "Bash(rm -rf:*)",
+      "Bash(sudo:*)",
+      "Bash(wget:*)",
+      "Bash(claude:*)",
+      "Bash(loop/run.sh:*)",
+      "Read(~/.claude/**)",
+      "Edit(~/.claude/**)",
+      "Write(~/.claude/**)",
+      "WebFetch",
+      "WebSearch"
+    ]
+  }
+}

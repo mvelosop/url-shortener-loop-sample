@@ -1,0 +1,38 @@
+{
+  "task": "T5",
+  "verdict": "PASS",
+  "criteria": [
+    {
+      "criterion": "A slug that does exist still works while unknown ones 404: `GET /:slug` redirects with 302 and `GET /links/:slug` returns 200 — the 404 is for misses only, not a blanket response.",
+      "met": true,
+      "evidence": "T5.log verify script posts a known slug then asserts 302 on GET /:known and 200 on GET /links/:known before probing unknown slugs; gate log shows no GATE FAIL. Confirmed by reading src/links/links.service.ts:36-42 and redirect.controller.ts — redirect() only throws when repository.incrementHits returns undefined."
+    },
+    {
+      "criterion": "`GET /nope99` returns 404 with no `Location` header and no redirect.",
+      "met": true,
+      "evidence": "links.service.ts:36-42 throws NotFoundException before the @Redirect() decorator's return value is used; Nest's exception filter runs ahead of the redirect pipeline, so no Location header is set. Verify script's redirect:'manual' fetch would report a non-404 status if a redirect occurred, and the gate passed."
+    },
+    {
+      "criterion": "`GET /links/nope99` returns 404.",
+      "met": true,
+      "evidence": "links.service.ts:28-34 findBySlug throws NotFoundException when repository.findBySlug returns undefined; links.controller.ts:15-18 has no try/catch to swallow it."
+    },
+    {
+      "criterion": "A well-formed but unknown slug such as `aaaaaa` behaves the same on both routes.",
+      "met": true,
+      "evidence": "Verify script loops over ['nope99','aaaaaa'] applying identical assertions to both routes; both are looked up via the same repository methods with no special-casing by slug shape."
+    },
+    {
+      "criterion": "The 404 response body is JSON containing a human-readable `message`.",
+      "met": true,
+      "evidence": "NotFoundException(`No link found for slug \"${slug}\"`) produces Nest's default JSON body {statusCode,message,error}; verify script asserts lj.message is a string for the /links/:slug 404."
+    },
+    {
+      "criterion": "Looking up unknown slugs creates no rows in the `links` table.",
+      "met": true,
+      "evidence": "links.repository.ts:41-44 incrementHits runs an UPDATE ... WHERE slug = ? (no-op on 0 matching rows) then a SELECT, never an INSERT; verify script asserts the links table holds exactly 1 row (the one created during setup) after probing two unknown slugs."
+    }
+  ],
+  "findings": [],
+  "notes": "No code changes were needed for this task — T4's implementation (NotFoundException in LinksService.findBySlug/redirect, no INSERT path for a miss) already satisfied every T5 acceptance criterion. Verified this independently by reading links.service.ts, links.controller.ts, redirect.controller.ts and links.repository.ts directly rather than trusting the proposal's claim; git status/diff confirm no src/ files were touched, consistent with the 'no code changes' summary. Gate log shows a clean build and no GATE FAIL line."
+}

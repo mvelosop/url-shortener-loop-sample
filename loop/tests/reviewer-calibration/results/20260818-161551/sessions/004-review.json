@@ -1,0 +1,78 @@
+{
+  "is_error": false,
+  "duration_api_ms": 62674,
+  "num_turns": 15,
+  "stop_reason": "end_turn",
+  "session_id": "a2c921f0-f8ce-4b39-8cdf-9b522ead4ead",
+  "total_cost_usd": 0.3725979,
+  "usage": {
+    "input_tokens": 22,
+    "cache_creation_input_tokens": 25922,
+    "cache_read_input_tokens": 469083,
+    "output_tokens": 5085,
+    "output_tokens_details": {
+      "thinking_tokens": 1983
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 25922,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 174,
+        "cache_read_input_tokens": 48979,
+        "cache_creation_input_tokens": 1261,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1261
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 22,
+      "outputTokens": 5085,
+      "cacheReadInputTokens": 469083,
+      "cacheCreationInputTokens": 25922,
+      "webSearchRequests": 0,
+      "costUSD": 0.3725979,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [
+    {
+      "tool_name": "Bash",
+      "tool_use_id": "toolu_01HGHnRaAzKkEetikrXwzNCt",
+      "tool_input": {
+        "command": "cd /tmp && rm -rf malformed-run && mkdir -p malformed-run/sessions && echo \"not json\" > malformed-run/sessions/001.json\ncd ~/source/personal/blog-posts/an-autonomous-loop-3-calibration\nuv run python -m runstat signals /tmp/malformed-run 1>/tmp/out3.txt 2>/tmp/err3.txt; echo \"exit=$?\"; echo \"--stdout--\"; cat /tmp/out3.txt; echo \"--stderr--\"; cat /tmp/err3.txt"
+      }
+    }
+  ],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**Verdict: FAIL.** T4 fails 2 of its 5 acceptance criteria: the error handler in `cli.py` prints the failure message to both stdout and stderr (comment literally says \"whichever stream they are watching\"), so stdout is never empty on a failing path — and there's no code path that returns exit code 1 for a readable-but-empty run; it exits 0 with a bogus all-zero report instead. `tests/test_errors.py` only checks the exit-2 case, so the gate passed without exercising either gap.",
+  "ttft_ms": 6473,
+  "ttft_stream_ms": 5356,
+  "time_to_request_ms": 3966,
+  "type": "result",
+  "duration_ms": 74331,
+  "uuid": "0f357c50-c0dd-40ef-a7ec-ca325a68b10d",
+  "phase": "review",
+  "iteration": 4
+}

@@ -1,0 +1,33 @@
+{
+  "task": "T6",
+  "verdict": "PASS",
+  "criteria": [
+    {
+      "criterion": "`POST /links` returns 400 for each of: {} (missing url), {\"url\": null}, {\"url\": \"\"}, {\"url\": 123}, {\"url\": \"not-a-url\"}, {\"url\": \"ftp://example.com/x\"}.",
+      "met": true,
+      "evidence": "src/links/dto/create-link.dto.ts adds @IsString/@IsNotEmpty/@IsUrl({protocols:['http','https'],require_protocol:true}) with no @IsOptional, and main.ts wires app.useGlobalPipes(new ValidationPipe(...)); each bad payload fails at least one decorator. Gate T6.log built and ran the verify script (which POSTs all six bad bodies and asserts 400) with no GATE FAIL output, i.e. exit 0."
+    },
+    {
+      "criterion": "Each 400 response body names the offending field `url`.",
+      "met": true,
+      "evidence": "class-validator's default error messages for these decorators are of the form 'url must be ...', all containing the property name; the verify script asserts /url/i against the response body and passed."
+    },
+    {
+      "criterion": "`POST /links` still returns 201 for a valid `http://` url and for a valid `https://` url.",
+      "met": true,
+      "evidence": "IsUrl with protocols ['http','https'] and require_protocol true accepts both schemes; verify script POSTs http://example.com/x and https://example.com/a/very/long/path and asserts 201, which passed."
+    },
+    {
+      "criterion": "No link row is created for a rejected request.",
+      "met": true,
+      "evidence": "ValidationPipe runs as a global pipe before the route handler executes, so LinksController.create/LinksService.create is never reached for a payload that fails validation; links.controller.ts itself is unchanged."
+    },
+    {
+      "criterion": "Validation is purely syntactic: the service never fetches the url or checks that it resolves.",
+      "met": true,
+      "evidence": "Only decorators from class-validator (IsString/IsNotEmpty/IsUrl) were added to the DTO; class-validator's IsUrl is a regex-based check (validator.js isURL) with no network I/O, and links.service.ts was not touched."
+    }
+  ],
+  "findings": [],
+  "notes": "No new spec files were added, consistent with the pattern set by T1-T5 (verification is done via the inline node verify script in state.json, not jest specs); a dedicated e2e test file is deferred to a later task per the work session's own notes. Diff is scoped to the DTO, main.ts's global pipe, and the new class-validator/class-transformer dependencies — matches the task's file list plus the expected package.json/package-lock.json dependency bump. No absolute paths introduced."
+}

@@ -1,0 +1,15 @@
+{
+  "task": "T9",
+  "verdict": "PASS",
+  "criteria": [
+    {"criterion": "`npm run test:e2e` exits 0 and runs at least four passing tests from `test/*.e2e-spec.ts`, with zero failures.", "met": true, "evidence": "gates/T9.log: 'PASS test/links.e2e-spec.ts', 'Tests: 7 passed, 7 total'"},
+    {"criterion": "The suite drives the running application over HTTP with supertest and uses the slug returned by the create in every subsequent request; no slug is hardcoded.", "met": true, "evidence": "test/links.e2e-spec.ts:41 captures `slug = res.body.slug` from the create response and reuses it at lines 45, 50, 53, 58"},
+    {"criterion": "It covers the worked example in order: create 201 matching slug/hits 0/url; GET /links/{slug} 200 hits 0; two GET /{slug} 302 with Location; GET /links/{slug} 200 hits 2.", "met": true, "evidence": "test/links.e2e-spec.ts:36-60, matches brief docs/briefs/0001-url-shortener.md:93-107 exactly, including URL and ordering"},
+    {"criterion": "Also covers GET /nope99 -> 404, GET /links/nope99 -> 404, POST /links \"not-a-url\" -> 400, same url posted twice -> 201 with a different slug.", "met": true, "evidence": "test/links.e2e-spec.ts:62-75"},
+    {"criterion": "`npm test` does not run the e2e specs and `npm run test:e2e` does not run the unit specs; both commands pass.", "met": true, "evidence": "gates/T9.log: e2e run only shows links.e2e-spec.ts; unit run only shows links.service.spec.ts, health.controller.spec.ts, slug.generator.spec.ts"},
+    {"criterion": "The suite creates and cleans up its own SQLite database, makes no network call, needs no manual setup step, and passes when run twice in a row.", "met": true, "evidence": "test/links.e2e-spec.ts:17-19 (mkdtempSync + migrate in beforeAll), :30-34 (rmSync + env cleanup in afterAll); gates/T9.log shows two consecutive e2e runs both '7 passed, 7 total'"},
+    {"criterion": "The whole e2e run finishes in seconds.", "met": true, "evidence": "gates/T9.log: 'Time: 0.841 s' and '0.775 s' for the two runs"}
+  ],
+  "findings": [],
+  "notes": "Test threads the slug correctly (no hardcoding), matches the brief's worked example verbatim, and package.json/test/jest-e2e.json were correctly left untouched since T1 already wired them. No absolute paths found in the changed file or proposal."
+}

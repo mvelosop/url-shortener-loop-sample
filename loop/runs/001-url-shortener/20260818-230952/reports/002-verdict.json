@@ -1,0 +1,38 @@
+{
+  "task": "T2",
+  "verdict": "PASS",
+  "criteria": [
+    {
+      "criterion": "`DATABASE_PATH=<file> npm run migrate` exits 0 and creates the SQLite file, including any missing parent directory.",
+      "met": true,
+      "evidence": "src/database/migrate.ts calls mkdirSync(dirname(databasePath), { recursive: true }) before opening the DatabaseSync connection, and package.json's migrate script (\"node dist/database/migrate.js\") runs migrate() via the require.main === module guard. The gate log (gates/T2.log) shows the build and migrate steps completing without a GATE FAIL line."
+    },
+    {
+      "criterion": "The migration creates a `links` table with columns for the slug, the url, the hit count and the creation timestamp.",
+      "met": true,
+      "evidence": "migrate.ts's CREATE TABLE IF NOT EXISTS links has slug, url, hits, created_at columns."
+    },
+    {
+      "criterion": "The slug column is the primary key or is covered by a unique index, so the database itself refuses duplicate slugs.",
+      "met": true,
+      "evidence": "migrate.ts: `slug TEXT PRIMARY KEY`."
+    },
+    {
+      "criterion": "Running `npm run migrate` a second time against the same file exits 0 and leaves the schema intact.",
+      "met": true,
+      "evidence": "CREATE TABLE IF NOT EXISTS is idempotent; the gate script calls migrate(db1) twice before inspecting the schema and did not fail."
+    },
+    {
+      "criterion": "Booting the application against a database that has never been migrated does not create the `links` table.",
+      "met": true,
+      "evidence": "database.module.ts's DATABASE_CONNECTION factory only does mkdirSync + `new DatabaseSync(path)` — it never issues CREATE TABLE. app.module.ts now imports DatabaseModule but nothing else touches schema at boot. Gate log shows no GATE FAIL for the unmigrated-boot check."
+    },
+    {
+      "criterion": "`DATABASE_PATH` defaults to a repo-relative path (`data/links.db`); no absolute path appears in any source or config file.",
+      "met": true,
+      "evidence": "DEFAULT_DATABASE_PATH = 'data/links.db' in migrate.ts, reused by database.module.ts. grep -rn \"/Users/\" over src/database, package.json and app.module.ts returned no matches."
+    }
+  ],
+  "findings": [],
+  "notes": "Two Bash permission denials appear in the work session (sessions/003-work.json): an ad hoc test against /tmp and a self-invocation of the gate's verify command from an absolute cd path. Both were denied by the sandbox and never executed, so no absolute paths or /tmp artifacts ended up in the diff — not a defect in the delivered task, just exploratory commands that got fenced off."
+}

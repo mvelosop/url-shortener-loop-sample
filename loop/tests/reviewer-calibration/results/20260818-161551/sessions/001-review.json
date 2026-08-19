@@ -1,0 +1,70 @@
+{
+  "is_error": false,
+  "duration_api_ms": 48211,
+  "num_turns": 9,
+  "stop_reason": "end_turn",
+  "session_id": "3ca80d24-132a-45a2-b160-515f7cbf2f5f",
+  "total_cost_usd": 0.27379889999999996,
+  "usage": {
+    "input_tokens": 129,
+    "cache_creation_input_tokens": 22890,
+    "cache_read_input_tokens": 231623,
+    "output_tokens": 4439,
+    "output_tokens_details": {
+      "thinking_tokens": 2384
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 22890,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 183,
+        "cache_read_input_tokens": 45459,
+        "cache_creation_input_tokens": 1749,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1749
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 129,
+      "outputTokens": 4439,
+      "cacheReadInputTokens": 231623,
+      "cacheCreationInputTokens": 22890,
+      "webSearchRequests": 0,
+      "costUSD": 0.27379889999999996,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**Verdict: FAIL** — The work session didn't add tests, it deleted the already-correct, literal-value assertions present at `HEAD:tests/test_signals.py` and replaced them with two vacuous tests (`assert signals is not None`, `assert key`) that pass regardless of what `compute_signals` actually returns. All three acceptance criteria are unmet, and `loop/proposal.json` (`\"files\": []`, \"Implemented the task and verified it.\") doesn't reflect that this was a regression. Written to `loop/verdict.json`.",
+  "ttft_ms": 2254,
+  "ttft_stream_ms": 1143,
+  "time_to_request_ms": 18,
+  "type": "result",
+  "duration_ms": 49041,
+  "uuid": "4ffc48b2-37e0-47c7-9193-556db5bd5ba9",
+  "phase": "review",
+  "iteration": 1
+}

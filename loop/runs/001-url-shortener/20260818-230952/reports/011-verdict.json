@@ -1,0 +1,48 @@
+{
+  "task": "T10",
+  "verdict": "PASS",
+  "criteria": [
+    {
+      "criterion": "After `npm run build` and `npm run migrate`, `node dist/main.js` started with NODE_ENV=production, PORT and DATABASE_PATH comes up and answers `GET /health` with 200 and {\"status\":\"ok\"}.",
+      "met": true,
+      "evidence": "Gate T10.log shows the build succeeded and the verify probe (which checks GET /health first, failing loudly with 'GATE FAIL' on any mismatch) produced zero GATE FAIL lines and exited 0; src/main.ts reads PORT from env and the health controller (unchanged from T1) returns {status:'ok'}."
+    },
+    {
+      "criterion": "The same running artifact serves `GET /api-json` with 200 and an OpenAPI document listing at least the four functional paths.",
+      "met": true,
+      "evidence": "src/main.ts sets up SwaggerModule.setup('api', app, document) which exposes /api-json; verify probe checks doc.paths length >= 4 and did not fail."
+    },
+    {
+      "criterion": "The same running artifact creates a link and redirects on it: POST /links -> 201, GET /{slug} -> 302.",
+      "met": true,
+      "evidence": "Verify probe posts to /links and checks 201, then GETs the slug and checks 302; no GATE FAIL emitted."
+    },
+    {
+      "criterion": "The process stays up on its own until signalled — it does not exit or crash while idle.",
+      "met": true,
+      "evidence": "Verify probe checks p.exitCode/p.signalCode are null before sending SIGTERM; no GATE FAIL."
+    },
+    {
+      "criterion": "On SIGTERM it shuts down within a few seconds, exiting 0 or terminated by SIGTERM; it never has to be SIGKILLed.",
+      "met": true,
+      "evidence": "src/main.ts calls app.enableShutdownHooks() (present since an earlier task); verify probe's stop() sends SIGTERM and would fail if code/signal didn't match; no GATE FAIL, and no SIGKILL fallback triggered (8s timeout not hit)."
+    },
+    {
+      "criterion": "Started again against the same DATABASE_PATH file, `GET /links/{slug}` returns the link created before the restart with its hit count intact.",
+      "met": true,
+      "evidence": "migrate.ts uses CREATE TABLE IF NOT EXISTS so the sqlite file persists across restarts; verify probe reboots against the same db file and checks lb.hits===1; no GATE FAIL."
+    },
+    {
+      "criterion": "It runs from `dist/` with production dependencies only — no ts-node, no dev-only import on the startup path.",
+      "met": true,
+      "evidence": "package.json has ts-node, ts-jest, jest, supertest, @nestjs/cli etc. under devDependencies only; src/main.ts and src/database/migrate.ts import only @nestjs/*, node:sqlite, node:fs, node:path — no dev-only imports."
+    },
+    {
+      "criterion": "`README.md` documents build, migrate, start, test and test:e2e using repo-relative paths only.",
+      "met": true,
+      "evidence": "README.md (new file) has Build/Migrate/Start/Test sections using dist/main.js, data/links.db, test/*.e2e-spec.ts — all repo-relative; grep for /Users/ across README.md, src/main.ts, package.json, migrate.ts found nothing."
+    }
+  ],
+  "findings": [],
+  "notes": "This task's only diff is README.md; source files (main.ts, migrate.ts) already satisfied the boot/shutdown/restart behaviour from earlier tasks (T7 shutdown hooks, T8/T9 database wiring), which the work session correctly identified rather than making needless changes. Verified independently against the code, not just the proposal's claim."
+}

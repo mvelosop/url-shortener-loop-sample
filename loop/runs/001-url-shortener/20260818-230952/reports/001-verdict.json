@@ -1,0 +1,15 @@
+{
+  "task": "T1",
+  "verdict": "PASS",
+  "criteria": [
+    {"criterion": "`npm run build` exits 0 and produces `dist/main.js`.", "met": true, "evidence": "npm run build exits 0 and dist/main.js is present"},
+    {"criterion": "`node dist/main.js` starts, listens on the port named by the `PORT` environment variable (default 3000), and answers `GET /health` with status 200 and the JSON body {\"status\":\"ok\"}.", "met": true, "evidence": "src/main.ts:8 reads process.env.PORT; direct run confirmed GET /health -> 200 {\"status\":\"ok\"}"},
+    {"criterion": "The process shuts down when sent SIGTERM; it does not have to be killed.", "met": true, "evidence": "src/main.ts:7 app.enableShutdownHooks(); direct SIGTERM test exited cleanly without needing SIGKILL"},
+    {"criterion": "`npm test` runs the unit suite (jest over `src/**/*.spec.ts`), reports at least one passing test and zero failures, and does not run any `*.e2e-spec.ts` file.", "met": true, "evidence": "package.json jest config rootDir:\"src\", testRegex \\.spec\\.ts$; npm test ran health.controller.spec.ts, 1 passed, 0 failed"},
+    {"criterion": "`npm run test:e2e` exists as a separate command configured by `test/jest-e2e.json`, with supertest installed and available.", "met": true, "evidence": "package.json script test:e2e -> jest --config test/jest-e2e.json; supertest and @types/supertest in devDependencies and resolvable in node_modules"},
+    {"criterion": "Nothing is generated beyond this slice: no links controller/service/entity, no Docker or compose files, no CI configuration, no web assets.", "met": true, "evidence": "find src test shows only main.ts, app.module.ts, health/health.controller.ts, health/health.controller.spec.ts, test/jest-e2e.json; no default app.controller.ts, no Docker files"},
+    {"criterion": "`node_modules/`, `dist/` and the runtime database directory are gitignored, and no file contains an absolute path.", "met": true, "evidence": ".gitignore includes node_modules/, dist/, data/; grep for /Users/ across tracked source/config files found nothing"}
+  ],
+  "findings": [],
+  "notes": "T1's own gate correctly does not invoke test:e2e; the current 'No tests found' exit-1 behavior for test:e2e is expected until T9 adds an e2e spec, and is outside this task's acceptance criteria. Scope stayed within the health slice only."
+}

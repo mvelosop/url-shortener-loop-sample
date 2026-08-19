@@ -1,0 +1,15 @@
+{
+  "task": "T7",
+  "outcome": "done",
+  "summary": "Slug generation now sits behind an injectable SlugGenerator provider (deterministic when SLUG_SEED is set, random otherwise); LinksService retries up to 5 candidates on a collision and throws a 500 only after all 5 are exhausted, writing no row.",
+  "files": [
+    "src/links/slug.generator.ts",
+    "src/links/slug.generator.spec.ts",
+    "src/links/links.service.ts",
+    "src/links/links.service.spec.ts",
+    "src/links/links.module.ts",
+    "src/links/links.repository.ts"
+  ],
+  "verified": "Ran T7's verify command from loop/state.json directly (build + boot dist/main.js with SLUG_SEED against throwaway sqlite files, checking determinism, retry-then-201, and exhaust-then-500 over HTTP): exit 0. Also re-ran npm test (10 passed, 3 suites) and T1-T6's verify commands: all exit 0.",
+  "notes": "RandomSlugGenerator (src/links/slug.generator.ts) uses a mulberry32 PRNG seeded by hashing SLUG_SEED when it's set, and node:crypto randomBytes per-call when it's unset — the seeded path is what gate/tests use to force real collisions across process restarts, since a fresh process with the same seed replays the same slug sequence from position 1. LinksRepository gained tryCreate(), which catches node:sqlite's collision error (error.code === 'ERR_SQLITE_ERROR' with message 'UNIQUE constraint failed: ...') and returns null instead of throwing, so LinksService.create() can loop up to MAX_SLUG_ATTEMPTS=5 candidates and only throw InternalServerErrorException (500) after the 5th failure; the original create() (throwing) is kept as-is and reused by tryCreate() to avoid duplicating the INSERT. links.module.ts provides SLUG_GENERATOR via a factory reading process.env.SLUG_SEED at module-instantiation time (once per process boot), matching the brief's 'injectable or seedable' requirement with both. links.service.spec.ts uses a small in-file QueueSlugGenerator fake plus a fake repository (no real sqlite) to force the retry-then-succeed and exhaust-then-500 paths deterministically without booting the app."
+}

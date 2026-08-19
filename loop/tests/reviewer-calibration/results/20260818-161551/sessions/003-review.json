@@ -1,0 +1,70 @@
+{
+  "is_error": false,
+  "duration_api_ms": 71233,
+  "num_turns": 19,
+  "stop_reason": "end_turn",
+  "session_id": "458e394c-b4c3-4506-a3ed-e5f898c131fa",
+  "total_cost_usd": 0.44980830000000005,
+  "usage": {
+    "input_tokens": 26,
+    "cache_creation_input_tokens": 30975,
+    "cache_read_input_tokens": 589501,
+    "output_tokens": 5802,
+    "output_tokens_details": {
+      "thinking_tokens": 2905
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 30975,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 156,
+        "cache_read_input_tokens": 54262,
+        "cache_creation_input_tokens": 1031,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1031
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 26,
+      "outputTokens": 5802,
+      "cacheReadInputTokens": 589501,
+      "cacheCreationInputTokens": 30975,
+      "webSearchRequests": 0,
+      "costUSD": 0.44980830000000005,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**Verdict: FAIL** — `cli.py` adds a `--json` flag to `runstat signals`, but brief 0003 explicitly lists \"Machine-readable output (`--json`, CSV export)\" as out of scope (line 215). The signal values/order/exit-code are otherwise correct against the worked-example fixture; the test suite's own coverage of that content is thin (only counts lines, doesn't check values) but that's a secondary note, not the reason for the fail.",
+  "ttft_ms": 1757,
+  "ttft_stream_ms": 1204,
+  "time_to_request_ms": 24,
+  "type": "result",
+  "duration_ms": 75068,
+  "uuid": "0979cd2f-c23d-49d2-b7bb-911d73e8632a",
+  "phase": "review",
+  "iteration": 3
+}

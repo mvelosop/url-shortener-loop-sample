@@ -1,0 +1,70 @@
+{
+  "is_error": false,
+  "duration_api_ms": 29317,
+  "num_turns": 12,
+  "stop_reason": "end_turn",
+  "session_id": "2eb959fe-19cf-4ad8-9483-bae3b86c1c4d",
+  "total_cost_usd": 0.2884632,
+  "usage": {
+    "input_tokens": 16,
+    "cache_creation_input_tokens": 24953,
+    "cache_read_input_tokens": 333924,
+    "output_tokens": 2568,
+    "output_tokens_details": {
+      "thinking_tokens": 174
+    },
+    "server_tool_use": {
+      "web_search_requests": 0,
+      "web_fetch_requests": 0
+    },
+    "service_tier": "standard",
+    "cache_creation": {
+      "ephemeral_1h_input_tokens": 24953,
+      "ephemeral_5m_input_tokens": 0
+    },
+    "inference_geo": "not_available",
+    "iterations": [
+      {
+        "input_tokens": 2,
+        "output_tokens": 108,
+        "cache_read_input_tokens": 48040,
+        "cache_creation_input_tokens": 1231,
+        "cache_creation": {
+          "ephemeral_5m_input_tokens": 0,
+          "ephemeral_1h_input_tokens": 1231
+        },
+        "type": "message"
+      }
+    ],
+    "speed": "standard"
+  },
+  "modelUsage": {
+    "claude-sonnet-5": {
+      "inputTokens": 16,
+      "outputTokens": 2568,
+      "cacheReadInputTokens": 333924,
+      "cacheCreationInputTokens": 24953,
+      "webSearchRequests": 0,
+      "costUSD": 0.2884632,
+      "contextWindow": 1000000,
+      "maxOutputTokens": 64000,
+      "canonicalModel": "claude-sonnet-5",
+      "provider": "firstParty"
+    }
+  },
+  "permission_denials": [],
+  "terminal_reason": "completed",
+  "fast_mode_state": "off",
+  "fast_mode_disabled_reason": "sdk_opt_in_required",
+  "subtype": "success",
+  "api_error_status": null,
+  "result": "**PASS** — T9's e2e suite (`test/links.e2e-spec.ts`) threads the created slug through every subsequent request, covers the worked example verbatim from the brief plus all the error cases, runs 7/7 twice in a row in under a second, and correctly keeps unit and e2e suites separate. No findings.",
+  "ttft_ms": 1950,
+  "ttft_stream_ms": 1377,
+  "time_to_request_ms": 14,
+  "type": "result",
+  "duration_ms": 32272,
+  "uuid": "3c0c770f-25b9-4011-93fa-f5b04da233d7",
+  "phase": "review",
+  "iteration": 10
+}

@@ -1,0 +1,26 @@
+{
+  "task": "T3",
+  "verdict": "FAIL",
+  "criteria": [
+    {
+      "criterion": "runstat signals <run-dir> prints exactly the eight key: value lines in the brief's order",
+      "met": true,
+      "evidence": "src/runstat/cli.py:_signals wires compute_signals/format_signals straight to stdout; ran `uv run python -m runstat signals` against the brief's worked-example fixture (tests/fixtures.py write_fixture_run) and got the eight lines with the exact labels, order and values from brief 0003 lines 172-181 ($4.08, 2/8, 1.50, etc.)"
+    },
+    {
+      "criterion": "The command exits 0 on a readable run",
+      "met": true,
+      "evidence": "manual run above returned exit code 0; tests/test_signals_cmd.py also asserts returncode == 0 and passes"
+    },
+    {
+      "criterion": "The implementation stays within what the brief asks for",
+      "met": false,
+      "evidence": "src/runstat/cli.py adds a `--json` flag to the signals subcommand (sig.add_argument(\"--json\", ...) and the json.dumps branch in _signals), but brief 0003's Out of scope section explicitly lists 'Machine-readable output (--json, CSV export)' (docs/briefs/0003-runstat-cli.md:215) as deliberately excluded"
+    }
+  ],
+  "findings": [
+    "Adds a --json flag to `runstat signals`, which the brief explicitly puts out of scope (docs/briefs/0003-runstat-cli.md:215, 'Machine-readable output (--json, CSV export)').",
+    "tests/test_signals_cmd.py only asserts len(lines) == 8 and exit code 0 — it never checks the labels, values or order, so acceptance criterion 1 ('prints exactly the eight key: value lines in the brief's order') has no regression coverage even though the current output happens to be correct against the fixture."
+  ],
+  "notes": "Content and exit-code behavior are correct against the worked-example fixture. Send back to drop the --json flag (and its now-dead json.dumps branch) and, ideally, strengthen the CLI test to assert the exact eight lines rather than just a count."
+}

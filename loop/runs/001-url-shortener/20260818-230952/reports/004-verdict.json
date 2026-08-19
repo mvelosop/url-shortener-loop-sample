@@ -1,0 +1,14 @@
+{
+  "task": "T4",
+  "verdict": "PASS",
+  "criteria": [
+    {"criterion": "GET /:slug for a known slug returns 302 with the Location header set to exactly the stored url.", "met": true, "evidence": "src/links/redirect.controller.ts: @Get(':slug') @Redirect() redirect() returns {url: link.url}; NestJS's default @Redirect() status is 302. Confirmed by T4's gate verify (two GET /:slug requests each checked for status 302 and Location === URL1) which passed."},
+    {"criterion": "Each GET /:slug increases that link's hit count by exactly one, and the increase is persisted.", "met": true, "evidence": "links.repository.ts incrementHits(): 'UPDATE links SET hits = hits + 1 WHERE slug = ?' then re-selects the row; redirect.controller.ts calls linksService.redirect(slug) which calls repository.incrementHits. Gate verified hits==2 after two redirects via a fresh GET /links/:slug read."},
+    {"criterion": "GET /links/:slug returns 200 with slug, url, hits and createdAt for a known slug.", "met": true, "evidence": "links.controller.ts: @Get(':slug') findOne() calls linksService.findBySlug(slug), which returns the full LinkRecord from the repository's toRecord() mapping (slug, url, hits, createdAt)."},
+    {"criterion": "GET /links/:slug never changes the hit count, however many times it is called.", "met": true, "evidence": "links.repository.ts findBySlug() only does a SELECT, no UPDATE. Gate verify made an extra GET /links/:slug read after confirming hits==2 and re-checked hits stayed 2."},
+    {"criterion": "After two redirects and any number of reads, GET /links/:slug reports hits == 2.", "met": true, "evidence": "Gate verify script explicitly performs two GET /:slug then GET /links/:slug and asserts hits===2, then reads again and asserts still 2; this ran and passed (T4.log shows build success, no GATE FAIL, exit 0)."},
+    {"criterion": "GET /health still returns 200: the root :slug route does not shadow the fixed routes.", "met": true, "evidence": "HealthController is a separate controller on AppModule; RedirectController's :slug route is registered in LinksModule's controllers array after LinksController, so /links and /links/:slug resolve before the catch-all. Verified directly: gate's final GET /health check passed, and I independently re-ran npm test (1/1 passing, no regression) and confirmed no absolute paths were introduced (git diff clean of /Users/)."}
+  ],
+  "findings": [],
+  "notes": "Route-ordering concern (whether the catch-all :slug route could shadow /health, /links, /api, /api-json) is real but resolved correctly here and is exercised by this task's own gate; T8 will need to keep verifying /api and /api-json stay reachable once added. None blocking."
+}

@@ -1,0 +1,38 @@
+{
+  "task": "T8",
+  "verdict": "PASS",
+  "criteria": [
+    {
+      "criterion": "`GET /api` returns 200 and serves a browsable Swagger UI page.",
+      "met": true,
+      "evidence": "Independently ran the exact verify command from loop/state.json; it fetches /api and asserts /swagger/i on the body. Exit 0."
+    },
+    {
+      "criterion": "`GET /api-json` returns 200 and an OpenAPI document generated at runtime by @nestjs/swagger; there is no hand-written spec file checked into the repo.",
+      "met": true,
+      "evidence": "git status shows no new spec file. src/main.ts:bootstrap still calls SwaggerModule.createDocument(app, config); the diff only adds inlineSchemaRefs(), which post-processes the generated document programmatically."
+    },
+    {
+      "criterion": "The document lists all four functional paths: /links, /{slug}, /links/{slug} and /health.",
+      "met": true,
+      "evidence": "Booted dist/main.js locally and fetched /api-json directly: paths were ['/health', '/links', '/links/{slug}', '/{slug}']."
+    },
+    {
+      "criterion": "The POST /links operation documents its request body including the `url` property.",
+      "met": true,
+      "evidence": "Fetched /api-json: paths['/links'].post.requestBody.content['application/json'].schema.properties.url is present with description/example sourced from CreateLinkDto's @ApiProperty."
+    },
+    {
+      "criterion": "The POST /links operation documents a 201 response whose schema describes slug, url, hits and createdAt.",
+      "met": true,
+      "evidence": "Fetched /api-json: responses['201'].content['application/json'].schema.properties has slug, url, hits, createdAt, each with the description/example from LinkDto's @ApiProperty decorators."
+    },
+    {
+      "criterion": "Adding the documentation changes no behaviour: every status code and response body from T3 to T7 is unchanged.",
+      "met": true,
+      "evidence": "src/links/links.controller.ts diff only replaces a hand-written inline @ApiBody schema with @ApiBody({ type: CreateLinkDto }); no runtime logic touched. src/main.ts diff only adds a pure post-processing function applied to the Swagger document before SwaggerModule.setup; request handling is untouched."
+    }
+  ],
+  "findings": [],
+  "notes": "This is the retry after the prior iteration's review_fail (commit 87ffbea), which correctly flagged that a hand-written inline @ApiBody schema on the controller duplicated CreateLinkDto's fields by hand, defeating the task's whole point (decorator-derived docs, no hand duplication). This attempt fixes it properly: @ApiBody({ type: CreateLinkDto }) now makes @nestjs/swagger emit a $ref sourced purely from the DTO's own @ApiProperty decorators, and a new inlineSchemaRefs() helper in src/main.ts walks the generated document's paths after creation, replacing each $ref with a deep-resolved copy of the matching components.schemas entry. Verified empirically by booting the built app and reading /api-json directly: the requestBody and 201 response schemas are fully inlined and correctly reflect CreateLinkDto/LinkDto, with no hand-typed property definitions anywhere in the diff. No absolute paths, no scope creep — diff is confined to the two files most relevant to the fix (src/main.ts, src/links/links.controller.ts), both in T8's file list."
+}

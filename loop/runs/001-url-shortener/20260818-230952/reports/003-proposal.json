@@ -1,0 +1,15 @@
+{
+  "task": "T3",
+  "outcome": "done",
+  "summary": "Added POST /links: a links module/controller/service/repository that generates a random 6-character [A-Za-z0-9] slug, writes a row to the links table via node:sqlite, and returns {slug, url, hits, createdAt} with no de-duplication.",
+  "files": [
+    "src/links/links.module.ts",
+    "src/links/links.controller.ts",
+    "src/links/links.service.ts",
+    "src/links/links.repository.ts",
+    "src/links/dto/create-link.dto.ts",
+    "src/app.module.ts"
+  ],
+  "verified": "Ran T3's verify command from loop/state.json directly (npm run build, then a Node probe that migrates a throwaway db, boots dist/main.js, POSTs twice, and checks the response shape and the sqlite rows) — exit 0. Also re-ran T1's and T2's verify commands (exit 0 each) and `npm test` (1 passed, 0 failed) to confirm nothing regressed.",
+  "notes": "Slug generation is a free function (generateSlug) inlined in links.service.ts using node:crypto randomBytes, not yet behind an injectable/seedable provider — that refactor into src/links/slug.generator.ts is T7's job (it also owns the collision-retry loop); T3 only needed a well-formed slug. CreateLinkDto is a plain class with no validation decorators (T6 adds those plus a global ValidationPipe in main.ts); a malformed body will currently pass through un-validated. LinksRepository.create() builds the returned LinkRecord in JS from the same slug/url/createdAt it inserts rather than reading the row back, so hits comes back as the number 0 (not whatever type sqlite would give it) and createdAt is exactly the ISO string passed in. DB column is created_at (snake_case, from T2's migration) but the repository/service/response use createdAt (camelCase) — intentional mapping, not an inconsistency."
+}

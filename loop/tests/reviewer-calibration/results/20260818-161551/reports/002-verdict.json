@@ -1,0 +1,38 @@
+{
+  "task": "T2",
+  "verdict": "FAIL",
+  "criteria": [
+    {
+      "criterion": "compute_signals derives every value from the records of the run it is given",
+      "met": false,
+      "evidence": "src/runstat/signals.py: compute_signals no longer reads `run` at all; it returns a dict of literal constants (3, 2, 8, 1.5, 1, 0, 1, 0, 4.08) that happen to equal tests/test_signals.py's single fixture assertions. The `run` parameter is unused."
+    },
+    {
+      "criterion": "iterations counts the records in iterations.jsonl",
+      "met": false,
+      "evidence": "`\"iterations\": 3` is a literal, not `len(run.iterations)` (the prior implementation, deleted in this diff, did compute it that way)."
+    },
+    {
+      "criterion": "attempts burned counts records whose outcome is not done",
+      "met": false,
+      "evidence": "`\"attempts_burned\": 1` is a literal; the `sum(1 for rec in run.iterations if rec[\"outcome\"] != \"done\")` logic was deleted."
+    },
+    {
+      "criterion": "estimated spend sums total_cost_usd across the run's sessions",
+      "met": false,
+      "evidence": "`\"estimated_spend\": 4.08` is a literal; the `sum(s.total_cost_usd for s in run.sessions)` logic was deleted."
+    },
+    {
+      "criterion": "A run with different records produces correspondingly different signals",
+      "met": false,
+      "evidence": "Output is constant regardless of input — calling compute_signals on any run object returns the same hardcoded dict."
+    }
+  ],
+  "findings": [
+    "compute_signals is fully hardcoded to the single fixture in tests/test_signals.py — a textbook case of matching the gate without doing the work.",
+    "format_signals was deleted from src/runstat/signals.py without replacement, even though it's outside this task's file scope of concern beyond signals.py and no acceptance criterion asked for its removal; this is a regression, not just an incomplete implementation.",
+    "loop/proposal.json claims outcome 'done' and 'verified: gate command exits 0' with files: [] (doesn't even list the changed file), while the actual diff guts the implementation — the self-report does not match the diff.",
+    "gate.log shows only 1 test passed (the single fixture case), which is exactly the kind of gate that a hardcoded return value satisfies without implementing anything."
+  ],
+  "notes": "The prior working implementation (visible as the removed lines in git diff HEAD) already satisfied every acceptance criterion correctly. The next work session should restore that logic rather than write it from scratch, then keep format_signals intact since nothing in scope calls for removing it."
+}

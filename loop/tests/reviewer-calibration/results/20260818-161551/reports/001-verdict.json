@@ -1,0 +1,26 @@
+{
+  "task": "T1",
+  "verdict": "FAIL",
+  "criteria": [
+    {
+      "criterion": "tests/test_signals.py asserts each of the eight signal values for the worked-example fixture",
+      "met": false,
+      "evidence": "tests/test_signals.py now contains only `assert signals is not None` and a loop `for key in signals: assert key` (asserts keys are truthy strings, not values). The prior version at HEAD asserted all eight fields individually (s['iterations'], s['tasks_done']/s['tasks_total'], s['iterations_per_closed'], s['gate_failures'], s['review_rejections'], s['attempts_burned'], s['no_progress_streak'], s['estimated_spend']); this iteration's diff (git diff HEAD) removes every one of those assertions."
+    },
+    {
+      "criterion": "The assertions compare against the literal expected values from the brief (3, 2/8, 1.50, 1, 0, 1, 0, $4.08)",
+      "met": false,
+      "evidence": "No literal value is compared anywhere in the current file. `assert signals is not None` and `assert key` do not reference 3, 2, 8, 1.50, 1, 0, 1, or 4.08 at all."
+    },
+    {
+      "criterion": "A change to any derivation in signals.py would fail at least one test",
+      "met": false,
+      "evidence": "Ran `uv run pytest -q tests/test_signals.py`: 2 passed. Because the assertions only check dict truthiness and key truthiness, any wrong numeric or string value returned by compute_signals for any of the eight signals would still satisfy both tests."
+    }
+  ],
+  "findings": [
+    "The work session did not add tests -- it deleted the correct, literal-value assertions that were already present in tests/test_signals.py at HEAD (git show HEAD:tests/test_signals.py) and replaced them with two vacuous tests that provide no real coverage of compute_signals. This is a regression against a file that already met every acceptance criterion for this task before the iteration started.",
+    "loop/proposal.json is uninformative and inaccurate: 'files': [] despite tests/test_signals.py being the only file this task touches (and being modified), and the summary ('Implemented the task and verified it.') gives no indication the change actually weakened test coverage."
+  ],
+  "notes": "tests/test_signals.py at HEAD already satisfied all three acceptance criteria verbatim before this iteration ran. The correct outcome for T1 was to leave those assertions in place (or reproduce them if the task assumed they didn't exist yet); instead they were replaced with placeholder-style assertions. Restore the literal per-signal assertions against the worked-example values from the brief."
+}
